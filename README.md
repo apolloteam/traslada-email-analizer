@@ -1,4 +1,4 @@
-# Agente Outlook 365 con Claude
+# Agente Outlook 365 con Claude (research)
 
 Agente autónomo que lee correos de Outlook 365, los analiza con Claude y toma acciones automáticamente (responder, reenviar) según las reglas definidas en `config/rules.json`.
 
@@ -57,20 +57,13 @@ cp .env.example .env
    - `Mail.ReadWrite` (para agregar categorías)
 5. Conceder consentimiento de administrador
 
-### 4. Configurar las reglas
+### 4. Actualizar repo (pull)
 
-Editá `config/rules.json`. Cada regla tiene:
-
-```json
-{
-  "id": "nombre-unico",
-  "descripcion": "Para qué sirve esta regla",
-  "condiciones": "Descripción en lenguaje natural de cuándo aplica",
-  "accion": "responder | reenviar | responder_y_reenviar | ignorar",
-  "reenviar_a": ["email@empresa.com"],
-  "instruccion_respuesta": "Qué debe decir la respuesta automática",
-  "comentario_reenvio": "Nota que acompaña el reenvío"
-}
+```bash
+cd home/ubuntu/projects/traslada-email-analizer/
+eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/claudito-sshkey
+git pull
 ```
 
 ---
