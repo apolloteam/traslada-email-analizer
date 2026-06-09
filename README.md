@@ -1,24 +1,6 @@
 # Agente Outlook 365 con Claude (research)
 
-Agente autónomo que lee correos de Outlook 365, los analiza con Claude y toma acciones automáticamente (responder, reenviar) según las reglas definidas en `config/rules.json`.
-
----
-
-## Estructura
-
-```
-outlook-agent/
-├── agent.py          ← Punto de entrada principal (loop principal)
-├── mail_client.py    ← Comunicación con Outlook via Graph API
-├── analyzer.py       ← Análisis de correos con Claude
-├── actions.py        ← Ejecución de respuestas y reenvíos
-├── requirements.txt
-├── .env.example      ← Copiar a .env y completar con tus credenciales
-├── config/
-│   └── rules.json    ← ACÁ configurás el comportamiento del agente
-└── logs/
-    └── agent.log     ← Log de todo lo que hace el agente
-```
+Agente autónomo que lee correos de Outlook 365, los analiza con Claude y toma acciones automáticamente (responder, reenviar) según las reglas definidas en `src/config`.
 
 ---
 
