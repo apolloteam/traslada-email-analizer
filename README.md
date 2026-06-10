@@ -54,16 +54,13 @@ git pull
 
 ```bash
 # Modo normal (loop cada 10 minutos según config)
-python agent.py
+python src/agent.py
 
 # Especificar intervalo
-python agent.py --interval 5
+python src/agent.py --interval 5
 
 # Correr solo una vez (útil para probar)
-python agent.py --once
-
-# Usar un archivo de reglas alternativo
-python agent.py --config config/rules_noche.json
+python src/agent.py --once
 ```
 
 ---
