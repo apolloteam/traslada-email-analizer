@@ -82,25 +82,43 @@ def ciclo(mail_client: MailClient, analizador: AnalizadorClaude):
 
             log.info(f"  🤖 Decisión: {decision['accion']} — {decision['razon']}")
 
-            # 2. Ejecutar la acción decidida
-            if decision["accion"] != "ignorar":
-                ejecutar_accion(decision, correo, mail_client)
+            # 2. Marcar como procesado PRIMERO.
+            # Se marca antes de ejecutar acciones para garantizar idempotencia:
+            # si una acción falla más abajo, el correo ya quedó marcado y NO se
+            # reprocesa en el próximo ciclo (evita responder/reenviar dos veces).
+            # La categoría 'AgenteProcesado' viaja con el correo aunque luego se mueva.
+            mail_client.marcar_procesado(correo["id"], decision.get("categorias", []))
 
-            # 3. Escalar si se detectaron red flags (independiente de la acción)
-            escalar_a = decision.get("escalar_a", [])
-            if escalar_a:
-                red_flags = decision.get("red_flags_detectados", [])
-                mail_client.enviar_alerta_escalacion(correo, red_flags, escalar_a)
-                log.warning(f"    🚨 Red flags: {red_flags} → Escalado a: {escalar_a}")
+            # 3. Ejecutar acción + escalar + mover, de forma protegida.
+            # Si algo falla acá, el correo ya está marcado (no se duplica) y se mueve
+            # a una carpeta de revisión para que nada se pierda en silencio.
+            try:
+                # 3a. Ejecutar la acción decidida
+                if decision["accion"] != "ignorar":
+                    ejecutar_accion(decision, correo, mail_client)
 
-            # 4. Mover a carpeta de archivo si la conversación está cerrada
-            carpeta = decision.get("carpeta_archivo")
-            if carpeta:
-                correo["id"] = mail_client.mover_a_carpeta(correo["id"], carpeta)  # ← actualiza el id
-                log.info(f"    📁 Movido a carpeta: {carpeta}")
+                # 3b. Escalar si se detectaron red flags (independiente de la acción)
+                escalar_a = decision.get("escalar_a", [])
+                if escalar_a:
+                    red_flags = decision.get("red_flags_detectados", [])
+                    mail_client.enviar_alerta_escalacion(correo, red_flags, escalar_a)
+                    log.warning(f"    🚨 Red flags: {red_flags} → Escalado a: {escalar_a}")
 
-            # 5. Marcar como procesado (agregar categoría en Outlook + categorías de las reglas)
-            mail_client.marcar_procesado(correo["id"], decision.get("categorias", []))           
+                # 3c. Mover a carpeta de archivo si la conversación está cerrada
+                carpeta = decision.get("carpeta_archivo")
+                if carpeta:
+                    correo["id"] = mail_client.mover_a_carpeta(correo["id"], carpeta)  # ← actualiza el id
+                    log.info(f"    📁 Movido a carpeta: {carpeta}")
+
+            except Exception as e:
+                # El correo ya fue marcado como procesado, así que no se reprocesa.
+                # Lo movemos a una carpeta de revisión manual para no perderlo.
+                log.error(f"    ⚠️ Falló la ejecución de acciones: {e}")
+                try:
+                    mail_client.mover_a_carpeta(correo["id"], "Errores/RequiereRevision")
+                    log.error(f"    📁 Movido a 'Errores/RequiereRevision' para revisión manual.")
+                except Exception as e2:
+                    log.error(f"    ❌ Tampoco se pudo mover a 'Errores/RequiereRevision': {e2}")
 
         except Exception as e:
             log.error(f"  ❌ Error procesando correo {correo['id']}: {e}")
