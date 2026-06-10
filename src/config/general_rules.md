@@ -52,7 +52,7 @@ Decisión:
 
 **condiciones:** Cualquier correo que no encaje en las reglas anteriores y sea de un remitente externo.
 
-No aplica a correos internos del dominio traslada.com.ar y dottransfers.com.
+No aplica a correos internos del dominio traslada.com.ar, dottransfers.com y vak.com.ar.
 
 - `accion`: responder
 - `instruccion_respuesta`: Agradecé el contacto. Indica que revisaremos su mensaje y responderán a la brevedad. No detalles más información.
