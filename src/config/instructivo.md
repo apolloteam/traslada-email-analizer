@@ -74,11 +74,17 @@ Esta es la parte más importante. Cada regla le dice al agente qué hacer cuando
 ```markdown
 ## Nombre de la regla
 
-**condiciones:** Descripción de cuándo aplica esta regla.
+### Condiciones
+Descripción de cuándo aplica esta regla.
 
-Ejemplos que aplican: "frase de ejemplo 1", "frase de ejemplo 2".
-No aplica si: descripción de casos que parecen similares pero no corresponden.
+### Ejemplos que aplican
+- Frase de ejemplo 1.
+- Frase de ejemplo 2.
 
+### Ejemplos que NO aplican
+- Descripción de casos que parecen similares pero no corresponden.
+
+### Campos de decisión
 - `accion`: qué hacer (responder, enviar, responder y reenviar, omitir)
 - `reenviar_a`: a quién reenviar
 - `instruccion_respuesta`: qué decir en la respuesta
@@ -201,12 +207,15 @@ Una regla que solo reenvía, sin responder al cliente:
 ```markdown
 ## Facturación y administración
 
-**condiciones:** El correo menciona facturas, pagos, transferencias, comprobantes,
-o consultas administrativas.
+### Condiciones
+El correo menciona facturas, pagos, transferencias, comprobantes, o consultas administrativas.
 
-Ejemplos que aplican: "adjunto la factura", "necesito el comprobante de pago",
-"¿puedo pagar en cuotas?".
+### Ejemplos que aplican
+- "adjunto la factura".
+- "necesito el comprobante de pago".
+- "¿puedo pagar en cuotas?".
 
+### Campos de decisión
 - `accion`: reenviar
 - `reenviar_a`: administracion@traslada.com.ar
 - `comentario_reenvio`: 📄 Consulta de facturación — derivada automáticamente.
@@ -219,13 +228,19 @@ Ejemplos que aplican: "adjunto la factura", "necesito el comprobante de pago",
 ```markdown
 ## Consulta comercial
 
-**condiciones:** El correo pregunta por precios, cotizaciones, presupuestos,
-o expresa interés en adquirir productos o servicios.
+### Condiciones
+El correo pregunta por precios, cotizaciones, presupuestos, o expresa interés en adquirir productos o servicios.
 
-Ejemplos que aplican: "¿cuánto cuesta?", "necesito un presupuesto",
-"quiero contratar", "me interesa el servicio".
-No aplica si ya es un cliente existente con una queja o problema técnico.
+### Ejemplos que aplican
+- "¿cuánto cuesta?".
+- "necesito un presupuesto".
+- "quiero contratar".
+- "me interesa el servicio".
 
+### Ejemplos que NO aplican
+- Si ya es un cliente existente con una queja o problema técnico.
+
+### Campos de decisión
 - `accion`: responder_y_reenviar
 - `reenviar_a`: ventas@traslada.com.ar
 - `instruccion_respuesta`: Agradecé el interés con entusiasmo. Informá que un asesor
@@ -273,21 +288,25 @@ Reglas y consideraciones para este buzón.
 ## Tono para este buzón
 
 Complementa el tono base con:
-- Entusiasta y orientado a la oportunidad: el cliente potencial está considerando
-  contratarnos, tratalo como si fuera una venta que queremos ganar.
+- Entusiasta y orientado a la oportunidad: el cliente potencial está considerando contratarnos, tratalo como si fuera una venta que queremos ganar.
 - Usá el nombre del remitente si figura en el correo.
 - Evitá tecnicismos de logística — hablá en términos del beneficio para el cliente.
 
-
 ## Consulta comercial
 
-**condiciones:** El correo pregunta por precios, cotizaciones, presupuestos,
-o expresa interés en adquirir productos o servicios.
+### Condiciones
+El correo pregunta por precios, cotizaciones, presupuestos, o expresa interés en adquirir productos o servicios.
 
-Ejemplos que aplican: "¿cuánto cuesta?", "necesito un presupuesto",
-"quiero contratar", "me interesa el servicio".
-No aplica si ya es un cliente existente con una queja o problema técnico.
+### Ejemplos que aplican
+- "¿cuánto cuesta?".
+- "necesito un presupuesto".
+- "quiero contratar".
+- "me interesa el servicio".
 
+### Ejemplos que NO aplican
+- Si ya es un cliente existente con una queja o problema técnico.
+
+### Campos de decisión
 - `accion`: responder_y_reenviar
 - `reenviar_a`: ventas@traslada.com.ar
 - `instruccion_respuesta`: Agradecé el interés con entusiasmo. Informá que un asesor
@@ -297,16 +316,21 @@ No aplica si ya es un cliente existente con una queja o problema técnico.
 - `categorias`: ["Comercial", "Lead"]
 - `borrador`: true
 
-
 ## Reclamo de cliente
 
-**condiciones:** El correo expresa insatisfacción, reclamo, queja, o menciona
-palabras como "mal servicio", "decepcionado", "exijo", "no funciona".
+### Condiciones
+El correo expresa insatisfacción, reclamo, queja, o menciona palabras como "mal servicio", "decepcionado", "exijo", "no funciona".
 
-Ejemplos que aplican: "estoy muy disconforme", "exijo una solución",
-"el servicio fue un desastre", "nunca me respondieron".
-No aplica si es un reporte técnico puntual sin tono de queja.
+### Ejemplos que aplican
+- "estoy muy disconforme".
+- "exijo una solución".
+- "el servicio fue un desastre".
+- "nunca me respondieron".
 
+### Ejemplos que NO aplican
+- Si es un reporte técnico puntual sin tono de queja.
+
+### Campos de decisión
 - `accion`: responder_y_reenviar
 - `reenviar_a`: atencion@traslada.com.ar
 - `instruccion_respuesta`: Pedí disculpas sinceras por la experiencia negativa.
@@ -315,20 +339,6 @@ No aplica si es un reporte técnico puntual sin tono de queja.
 - `comentario_reenvio`: 🚨 RECLAMO DE CLIENTE — Requiere atención prioritaria.
 - `categorias`: ["Reclamo"]
 - `borrador`: true
-
-
-## Facturación y administración
-
-**condiciones:** El correo menciona facturas, pagos, transferencias, comprobantes,
-o consultas administrativas.
-
-Ejemplos que aplican: "adjunto la factura", "necesito el comprobante de pago",
-"¿puedo pagar en cuotas?".
-
-- `accion`: reenviar
-- `reenviar_a`: administracion@traslada.com.ar
-- `comentario_reenvio`: 📄 Consulta de facturación — derivada automáticamente.
-
 
 ## Archivo de conversaciones finalizadas
 
@@ -341,8 +351,7 @@ asigná `carpeta_archivo` con la carpeta correspondiente:
 - El reclamo fue resuelto y el cliente confirmó conformidad → `"Reclamos/Resuelto"`
 - Consulta de facturación resuelta → `"Administracion/Resuelto"`
 
-Si la conversación sigue abierta, el cliente no respondió, o hay dudas
-→ dejá `carpeta_archivo` en null (no mover).
+Si la conversación sigue abierta, el cliente no respondió, o hay dudas → dejá `carpeta_archivo` en null (no mover).
 ```
 
 ---
