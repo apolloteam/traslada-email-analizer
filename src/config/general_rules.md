@@ -41,6 +41,7 @@ No aplica si:
 - La oferta es de un proveedor con quien ya tenemos relación.
 - Hay dudas sobre si es publicidad o una consulta real → usá la regla que mejor aplique.
 
+Decisión:
 - `accion`: ignorar
 - `carpeta_archivo`: "Publicidad"
 - `categorias`: ["Publicidad"]

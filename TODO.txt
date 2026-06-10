@@ -8,6 +8,7 @@
 ✓ Revisar prompts.
 ✓ Si la regla lo indica, dejar la respuesta en draft (no enviar directamente).
 ✓ Carpetas anidadas — _get_or_create_folder() solo crea carpetas de primer nivel. Las reglas ya usan paths como "Comercial/Cerrado" y "Reclamos/Resuelto", pero el método actual las crearía como carpetas planas con ese nombre literal. Hay que implementar la navegación jerárquica.
+☐ Controlar que si un ciclo tarda más que el intervalo, que no se pisen los ciclos.
 ☐ Guía para redacción de reglas específicas.
     ☐ Agregar a la guía cómo escribir subcarpetas de destino.
 ☐ Log en base de datos.
