@@ -13,7 +13,7 @@ from utils.email_parser import extraer_texto_body
 
 logger = logging.getLogger(__name__)
 
-MODELO = "claude-sonnet-4-6"
+MODELO = os.getenv("AI_MODEL", "claude-sonnet-4-6")
 _DEFAULT_RULES_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "config")
 
 _CORREO_PROMPT_TEMPLATE = """
@@ -61,10 +61,12 @@ class AnalizadorClaude:
             contenido = f.read()
         return contenido
 
-    def analizar(self, correo: dict, buzon: str) -> dict:
+    def analizar(self, correo: dict, buzon: str) -> tuple[dict, dict]:
         """
         Le pasa el correo y las reglas a Claude.
-        Devuelve un dict con: accion, razon, datos_extra
+        Devuelve una tupla (decision, uso):
+        - decision: dict con accion, razon, nombre_regla, etc.
+        - uso: dict con input_tokens, output_tokens y modelo (para el log de costos).
         """
 
         remitente          = correo["from"]["emailAddress"]["address"]
@@ -100,7 +102,13 @@ class AnalizadorClaude:
         )
 
         decision = response.parsed_output.model_dump()
-        return decision
+        uso = {
+            "input_tokens": response.usage.input_tokens,
+            "output_tokens": response.usage.output_tokens,
+            "modelo": MODELO,
+        }
+        resultado = (decision, uso)
+        return resultado
 
     def generar_respuesta_personalizada(self, correo: dict, instruccion: str) -> str:
         """

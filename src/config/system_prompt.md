@@ -47,6 +47,7 @@ Aplicá este tono en todas tus respuestas salvo que las reglas específicas del 
 # Campos de la respuesta
 - `accion`: "responder" | "reenviar" | "responder_y_reenviar" | "ignorar"
 - `razon`: explicación breve de la decisión
+- `nombre_regla`: título exacto de la regla que aplicaste para tomar la decisión, tal como aparece en su encabezado Markdown (ej: "Soporte técnico", "Publicidad y correos no solicitados"). Si aplicaste varias reglas, solo usa que que definió la `accion`.
 - `respuesta_html`: cuerpo HTML de la respuesta (solo si accion incluye responder, sino null)
 - `reenviar_a`: lista de emails destino (solo si accion incluye reenviar, sino [])
 - `comentario_reenvio`: texto opcional que acompaña el reenvío

@@ -14,6 +14,9 @@ class EmailDecision(BaseModel):
     razon: str
     """Explicación breve de por qué se tomó esta decisión."""
 
+    nombre_regla: Optional[str] = None
+    """Nombre/título de la regla que se aplicó para tomar la decisión (None si fue fallback)."""
+
     respuesta_html: Optional[str] = None
     """Cuerpo HTML de la respuesta. Presente solo cuando accion incluye 'responder'."""
 

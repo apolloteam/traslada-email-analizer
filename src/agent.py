@@ -9,15 +9,18 @@ Uso:
 
 import os
 import time
+import json
 import logging
 import argparse
 from datetime import datetime, timezone
 
 _DIR = os.path.dirname(os.path.abspath(__file__))
 
-from mail_client import MailClient 
-from analyzer import AnalizadorClaude
+from mail_client import MailClient
+from analyzer import AnalizadorClaude, MODELO
 from actions import ejecutar_accion
+from models.email_decision_log import EmailDecisionLog
+import db_logger
 
 # ── Logging ────────────────────────────────────────────────────────
 _LOG_DIR = os.path.join(_DIR, "logs")
@@ -32,6 +35,57 @@ logging.basicConfig(
     ]
 )
 log = logging.getLogger(__name__)
+
+
+def _direcciones(lista) -> list[str]:
+    """Aplana una lista de destinatarios de Graph a una lista de direcciones de email."""
+    resultado = [
+        r.get("emailAddress", {}).get("address", "")
+        for r in (lista or [])
+        if r.get("emailAddress", {}).get("address")
+    ]
+    return resultado
+
+
+def _construir_log_record(
+    correo: dict,
+    mail_client: MailClient,
+    decision: dict | None,
+    uso: dict | None,
+    elapsed: float,
+    error_descrip: str | None,
+) -> EmailDecisionLog:
+    """Arma el registro de log a partir del correo y la decisión (o el error)."""
+    input_tokens  = uso["input_tokens"] if uso else 0
+    output_tokens = uso["output_tokens"] if uso else 0
+
+    record = EmailDecisionLog(
+        mailbox=mail_client.buzon,
+        analyzed_date=datetime.now(timezone.utc).isoformat(),
+        email_id=correo.get("id", ""),
+        internet_message_id=correo.get("internetMessageId"),
+        conversation_id=correo.get("conversationId"),
+        subject=correo.get("subject"),
+        from_address=correo.get("from", {}).get("emailAddress", {}).get("address"),
+        to_recipients=_direcciones(correo.get("toRecipients")),
+        cc_recipients=_direcciones(correo.get("ccRecipients")),
+        reply_to=_direcciones(correo.get("replyTo")),
+        received_date_time=correo.get("receivedDateTime"),
+        sent_date_time=correo.get("sentDateTime"),
+        has_attachments=correo.get("hasAttachments"),
+        rule_name=decision.get("nombre_regla") if decision else None,
+        accion=decision.get("accion") if decision else None,
+        red_flag=bool(decision.get("red_flags_detectados")) if decision else False,
+        decision_json=json.dumps(decision, ensure_ascii=False) if decision else None,
+        elapsed_time=elapsed,
+        ai_model=MODELO,
+        input_tokens=input_tokens,
+        output_tokens=output_tokens,
+        cost=db_logger.calcular_costo(input_tokens, output_tokens),
+        error=error_descrip is not None,
+        error_descrip=error_descrip,
+    )
+    return record
 
 
 def ciclo(mail_client: MailClient, analizador: AnalizadorClaude):
@@ -77,48 +131,68 @@ def ciclo(mail_client: MailClient, analizador: AnalizadorClaude):
                 continue
             # ──────────────────────────────────────────────────────────────────────────────────────
 
-            # 1. Claude analiza el correo y decide qué hacer
-            decision = analizador.analizar(correo, mail_client.buzon)
-
-            log.info(f"  🤖 Decisión: {decision['accion']} — {decision['razon']}")
-
-            # 2. Marcar como procesado PRIMERO.
-            # Se marca antes de ejecutar acciones para garantizar idempotencia:
-            # si una acción falla más abajo, el correo ya quedó marcado y NO se
-            # reprocesa en el próximo ciclo (evita responder/reenviar dos veces).
-            # La categoría 'AgenteProcesado' viaja con el correo aunque luego se mueva.
-            mail_client.marcar_procesado(correo["id"], decision.get("categorias", []))
-
-            # 3. Ejecutar acción + escalar + mover, de forma protegida.
-            # Si algo falla acá, el correo ya está marcado (no se duplica) y se mueve
-            # a una carpeta de revisión para que nada se pierda en silencio.
+            # ── A partir de acá el correo se analiza: SIEMPRE se loguea a DB ──────────
+            inicio = time.monotonic()
+            decision = None
+            uso = None
+            error_descrip = None
             try:
-                # 3a. Ejecutar la acción decidida
-                if decision["accion"] != "ignorar":
-                    ejecutar_accion(decision, correo, mail_client)
+                # 1. Claude analiza el correo y decide qué hacer
+                decision, uso = analizador.analizar(correo, mail_client.buzon)
 
-                # 3b. Escalar si se detectaron red flags (independiente de la acción)
-                escalar_a = decision.get("escalar_a", [])
-                if escalar_a:
-                    red_flags = decision.get("red_flags_detectados", [])
-                    mail_client.enviar_alerta_escalacion(correo, red_flags, escalar_a)
-                    log.warning(f"    🚨 Red flags: {red_flags} → Escalado a: {escalar_a}")
+                log.info(f"  🤖 Decisión: {decision['accion']} — {decision['razon']}")
 
-                # 3c. Mover a carpeta de archivo si la conversación está cerrada
-                carpeta = decision.get("carpeta_archivo")
-                if carpeta:
-                    correo["id"] = mail_client.mover_a_carpeta(correo["id"], carpeta)  # ← actualiza el id
-                    log.info(f"    📁 Movido a carpeta: {carpeta}")
+                # 2. Marcar como procesado PRIMERO.
+                # Se marca antes de ejecutar acciones para garantizar idempotencia:
+                # si una acción falla más abajo, el correo ya quedó marcado y NO se
+                # reprocesa en el próximo ciclo (evita responder/reenviar dos veces).
+                # La categoría 'AgenteProcesado' viaja con el correo aunque luego se mueva.
+                mail_client.marcar_procesado(correo["id"], decision.get("categorias", []))
+
+                # 3. Ejecutar acción + escalar + mover, de forma protegida.
+                # Si algo falla acá, el correo ya está marcado (no se duplica) y se mueve
+                # a una carpeta de revisión para que nada se pierda en silencio.
+                try:
+                    # 3a. Ejecutar la acción decidida
+                    if decision["accion"] != "ignorar":
+                        ejecutar_accion(decision, correo, mail_client)
+
+                    # 3b. Escalar si se detectaron red flags (independiente de la acción)
+                    escalar_a = decision.get("escalar_a", [])
+                    if escalar_a:
+                        red_flags = decision.get("red_flags_detectados", [])
+                        mail_client.enviar_alerta_escalacion(correo, red_flags, escalar_a)
+                        log.warning(f"    🚨 Red flags: {red_flags} → Escalado a: {escalar_a}")
+
+                    # 3c. Mover a carpeta de archivo si la conversación está cerrada
+                    carpeta = decision.get("carpeta_archivo")
+                    if carpeta:
+                        correo["id"] = mail_client.mover_a_carpeta(correo["id"], carpeta)  # ← actualiza el id
+                        log.info(f"    📁 Movido a carpeta: {carpeta}")
+
+                except Exception as e:
+                    # El correo ya fue marcado como procesado, así que no se reprocesa.
+                    # Lo movemos a una carpeta de revisión manual para no perderlo.
+                    error_descrip = str(e)
+                    log.error(f"    ⚠️ Falló la ejecución de acciones: {e}")
+                    try:
+                        mail_client.mover_a_carpeta(correo["id"], "Errores/RequiereRevision")
+                        log.error(f"    📁 Movido a 'Errores/RequiereRevision' para revisión manual.")
+                    except Exception as e2:
+                        log.error(f"    ❌ Tampoco se pudo mover a 'Errores/RequiereRevision': {e2}")
 
             except Exception as e:
-                # El correo ya fue marcado como procesado, así que no se reprocesa.
-                # Lo movemos a una carpeta de revisión manual para no perderlo.
-                log.error(f"    ⚠️ Falló la ejecución de acciones: {e}")
-                try:
-                    mail_client.mover_a_carpeta(correo["id"], "Errores/RequiereRevision")
-                    log.error(f"    📁 Movido a 'Errores/RequiereRevision' para revisión manual.")
-                except Exception as e2:
-                    log.error(f"    ❌ Tampoco se pudo mover a 'Errores/RequiereRevision': {e2}")
+                # Falló el análisis o el marcado: no hay decisión (o quedó incompleta).
+                error_descrip = str(e)
+                log.error(f"  ❌ Error analizando correo {correo['id']}: {e}")
+
+            finally:
+                # 4. Registrar en DB qué hizo el agente (decisión, tokens, costo, tiempo, error).
+                elapsed = time.monotonic() - inicio
+                record = _construir_log_record(
+                    correo, mail_client, decision, uso, elapsed, error_descrip
+                )
+                db_logger.enviar_log(record)
 
         except Exception as e:
             log.error(f"  ❌ Error procesando correo {correo['id']}: {e}")
