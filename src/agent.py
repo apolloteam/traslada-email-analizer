@@ -13,6 +13,7 @@ import json
 import logging
 import argparse
 from datetime import datetime, timezone
+from zoneinfo import ZoneInfo
 
 _DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -35,6 +36,29 @@ logging.basicConfig(
     ]
 )
 log = logging.getLogger(__name__)
+
+
+TZ_ARGENTINA = ZoneInfo("America/Argentina/Buenos_Aires")
+
+
+def _a_hora_argentina(valor) -> str | None:
+    """
+    Convierte un datetime o un string ISO 8601 (UTC u otro offset) a hora local de
+    Argentina y lo devuelve como ISO 8601 SIN zona horaria (naive), para que la base de
+    datos guarde el horario 'de pared' argentino sin reconversiones del lado del server.
+    Devuelve None si el valor es vacío.
+    """
+    if not valor:
+        return None
+    if isinstance(valor, str):
+        dt = datetime.fromisoformat(valor.replace("Z", "+00:00"))
+    else:
+        dt = valor
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=timezone.utc)  # si viene naive, se asume UTC
+    local = dt.astimezone(TZ_ARGENTINA).replace(tzinfo=None)
+    resultado = local.isoformat()
+    return resultado
 
 
 def _direcciones(lista) -> str:
@@ -62,7 +86,7 @@ def _construir_log_record(
 
     record = EmailDecisionLog(
         mailbox=mail_client.buzon,
-        analyzed_date=datetime.now(timezone.utc).isoformat(),
+        analyzed_date=_a_hora_argentina(datetime.now(timezone.utc)),
         email_id=correo.get("id", ""),
         internet_message_id=correo.get("internetMessageId"),
         conversation_id=correo.get("conversationId"),
@@ -71,8 +95,8 @@ def _construir_log_record(
         to_recipients=_direcciones(correo.get("toRecipients")),
         cc_recipients=_direcciones(correo.get("ccRecipients")),
         reply_to=_direcciones(correo.get("replyTo")),
-        received_date_time=correo.get("receivedDateTime"),
-        sent_date_time=correo.get("sentDateTime"),
+        received_date_time=_a_hora_argentina(correo.get("receivedDateTime")),
+        sent_date_time=_a_hora_argentina(correo.get("sentDateTime")),
         has_attachments=correo.get("hasAttachments"),
         rule_name=decision.get("nombre_regla") if decision else None,
         accion=decision.get("accion") if decision else None,
