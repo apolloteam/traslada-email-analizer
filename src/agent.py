@@ -37,13 +37,14 @@ logging.basicConfig(
 log = logging.getLogger(__name__)
 
 
-def _direcciones(lista) -> list[str]:
-    """Aplana una lista de destinatarios de Graph a una lista de direcciones de email."""
-    resultado = [
+def _direcciones(lista) -> str:
+    """Aplana destinatarios de Graph a un string de direcciones separadas por ';'."""
+    direcciones = [
         r.get("emailAddress", {}).get("address", "")
         for r in (lista or [])
         if r.get("emailAddress", {}).get("address")
     ]
+    resultado = ";".join(direcciones)
     return resultado
 
 

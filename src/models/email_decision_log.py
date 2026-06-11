@@ -26,9 +26,9 @@ class EmailDecisionLog(BaseModel):
     # Datos del correo
     subject: Optional[str] = None
     from_address: Optional[str] = None
-    to_recipients: list[str] = []
-    cc_recipients: list[str] = []
-    reply_to: list[str] = []
+    to_recipients: Optional[str] = None
+    cc_recipients: Optional[str] = None
+    reply_to: Optional[str] = None
     received_date_time: Optional[str] = None
     sent_date_time: Optional[str] = None
     has_attachments: Optional[bool] = None
