@@ -89,9 +89,19 @@ class MailClient:
         Así el agente nunca reprocesa el mismo mail.
         """
 
-        # NOTA: El paréntesis en $select es solo para concatenar el string sin 
-        # que se rompa la línea (lo une en tiempo de compilación, no tiene costo). 
+        # NOTA: El paréntesis en $select es solo para concatenar el string sin
+        # que se rompa la línea (lo une en tiempo de compilación, no tiene costo).
         # No es parte de la sintaxis de Microsoft Graph.
+
+        # Excluye los ya procesados por el agente. Si está seteada PROCESAR_DESDE
+        # (fecha/hora ISO 8601 en UTC, ej: "2026-06-11T00:00:00Z"), excluye además los
+        # correos anteriores a esa fecha: así, al arrancar en un buzón que todavía no tiene
+        # la categoría 'AgenteProcesado', no se procesan los correos viejos.
+        filtro = f"NOT categories/any(c:c eq '{CATEGORIA_PROCESADO}')"
+        procesar_desde = os.getenv("PROCESAR_DESDE")
+        if procesar_desde:
+            filtro = f"receivedDateTime ge {procesar_desde} and {filtro}"
+
         params = {
             "$top": cantidad,
             "$select": (
@@ -113,8 +123,7 @@ class MailClient:
                 "parentFolderId"
             ),
             "$orderby": "receivedDateTime asc",
-            # Excluye los ya procesados por el agente
-            "$filter": f"NOT categories/any(c:c eq '{CATEGORIA_PROCESADO}')",
+            "$filter": filtro,
         }
         url = f"{GRAPH}/users/{self.buzon}/messages"
         r = self._request_con_retry("GET", url, params=params)
