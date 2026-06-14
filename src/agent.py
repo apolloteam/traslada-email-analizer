@@ -84,6 +84,10 @@ def _construir_log_record(
     input_tokens  = uso["input_tokens"] if uso else 0
     output_tokens = uso["output_tokens"] if uso else 0
 
+    # Le saca el prefijo "📢 Regla - ".
+    rule_name=decision.get("nombre_regla") if decision else None
+    clean_rule_name = rule_name.split("Regla -", 1)[-1].strip() if rule_name else None
+    
     record = EmailDecisionLog(
         mailbox=mail_client.buzon,
         analyzed_date=_a_hora_argentina(datetime.now(timezone.utc)),
@@ -98,7 +102,7 @@ def _construir_log_record(
         received_date_time=_a_hora_argentina(correo.get("receivedDateTime")),
         sent_date_time=_a_hora_argentina(correo.get("sentDateTime")),
         has_attachments=correo.get("hasAttachments"),
-        rule_name=decision.get("nombre_regla") if decision else None,
+        rule_name=clean_rule_name,
         accion=decision.get("accion") if decision else None,
         red_flag=bool(decision.get("red_flags_detectados")) if decision else False,
         decision_json=json.dumps(decision, ensure_ascii=False) if decision else None,

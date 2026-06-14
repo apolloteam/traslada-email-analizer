@@ -14,6 +14,14 @@
 ✓ Log en base de datos.
 ☐ Dry-run mode — Un --dry-run en agent.py que loguee las decisiones sin ejecutar nada sería muy útil para probar reglas nuevas sin riesgo.
 ☐ prioridad no se usa — Claude la devuelve, está en EmailDecision, pero en agent.py y actions.py nadie la lee. Podrías usarla para cambiar la importance del correo en Graph API (marcar_importancia()), o al menos logearla diferente.
+Prompts
+☐ Agregar en los .md específicos de Dot y Vak que es un segmento de Traslada llamado **VAK**/**DotTransfers**, etc... (en el system_prompt dice que es traslada).
+☐ En cada md de buzón, poner regla de "Derivación"... 
+    Ejmplo en ventas:
+        Si detectas que es una consulta operativa de un viaje ya reservado.
+        Si detectas que es envío, logistica, reenvía el mail al buzón correspondiente:
+        - envios: envios@traslada
+        - logistica: vak@traslada
 
 Excluidos
 ☐ Plantilla de respuesta.
