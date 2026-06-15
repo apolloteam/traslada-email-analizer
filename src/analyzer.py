@@ -76,19 +76,10 @@ class AnalizadorClaude:
         reglas_generales   = self._cargar_reglas_generales()
         reglas_especificas = self._cargar_reglas_especificas(buzon)
 
-        try:
-            # system_prompt = self._system_prompt_template.format_map({
-            #     "reglas_generales": reglas_generales,
-            #     "reglas_especificas": reglas_especificas,
-            # })
-            system_prompt = (self._system_prompt_template
-                .replace("{reglas_generales}", reglas_generales)
-                .replace("{reglas_especificas}", reglas_especificas))
+        system_prompt = (self._system_prompt_template
+            .replace("{reglas_generales}", reglas_generales)
+            .replace("{reglas_especificas}", reglas_especificas))
             
-        except KeyError as e:
-            logger.error("Campo faltante en system_prompt.md: %s", e)
-            raise
-
         correo_prompt = _CORREO_PROMPT_TEMPLATE.format_map({
             "remitente": remitente,
             "fecha": fecha,
