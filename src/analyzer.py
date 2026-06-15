@@ -77,10 +77,14 @@ class AnalizadorClaude:
         reglas_especificas = self._cargar_reglas_especificas(buzon)
 
         try:
-            system_prompt = self._system_prompt_template.format_map({
-                "reglas_generales": reglas_generales,
-                "reglas_especificas": reglas_especificas,
-            })
+            # system_prompt = self._system_prompt_template.format_map({
+            #     "reglas_generales": reglas_generales,
+            #     "reglas_especificas": reglas_especificas,
+            # })
+            system_prompt = (self._system_prompt_template
+                .replace("{reglas_generales}", reglas_generales)
+                .replace("{reglas_especificas}", reglas_especificas))
+            
         except KeyError as e:
             logger.error("Campo faltante en system_prompt.md: %s", e)
             raise
@@ -109,30 +113,3 @@ class AnalizadorClaude:
         }
         resultado = (decision, uso)
         return resultado
-
-    def generar_respuesta_personalizada(self, correo: dict, instruccion: str) -> str:
-        """
-        Genera una respuesta HTML personalizada con una instrucción específica.
-        Útil para reglas que necesitan respuestas más elaboradas.
-        """
-        asunto = correo.get("subject", "")
-        cuerpo = correo.get("bodyPreview", "")
-        remitente = correo["from"]["emailAddress"]["address"]
-
-        prompt = f"""Generá una respuesta profesional en HTML para este correo.
-
-Instrucción: {instruccion}
-
-Correo original:
-- De: {remitente}
-- Asunto: {asunto}
-- Cuerpo: {cuerpo}
-
-Devolvé solo el HTML del cuerpo del email, sin <html> ni <body>. Usá el mismo idioma que el correo original."""
-
-        message = self.client.messages.create(
-            model=MODELO,
-            max_tokens=800,
-            messages=[{"role": "user", "content": prompt}]
-        )
-        return message.content[0].text.strip()

@@ -84,7 +84,6 @@ En caso que ya le hayas indicado que utilice los canales para B2C y haya solicit
   informá los canales para reservas B2C. Usá el siguiente ejemplo como modelo de tono,
   estructura y formato HTML, adaptando el nombre y el contenido al correo real:
 
-  Ejemplo:
 ```
   <p>Hola Gonzalo,</p>
   <p>¡Gracias por contactarnos! Nos alegra que estés considerando a Traslada para tu traslado.</p>
@@ -218,7 +217,6 @@ El correo no corresponde a una gestión comercial sino a otra área: reclamos, a
 
 #### Ejemplos que NO aplican
 - Consultas de precio o presupuesto de un traslado nuevo (eso es Consulta comercial).
-- Reclamos que la regla "Reclamo de cliente" de este buzón ya contempla.
 
 #### Campos de decisión
 - `accion`: reenviar

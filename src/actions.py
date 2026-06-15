@@ -53,7 +53,7 @@ def _responder(mail: MailClient, msg_id: str, remitente: str, asunto: str, decis
     if reply_to_address:
         mail.responder_a_reply_to(msg_id, cuerpo, reply_to_address)
         log.info(f"    ✉️  Respuesta enviada al replyTo: {reply_to_address} (correo derivado)")
-    elif decision.get("responder_como_draft", False):
+    elif decision.get("borrador", False):
         mail.crear_draft_respuesta(msg_id, cuerpo)
         log.info(f"    📝  Borrador creado para: {remitente} | Asunto: {asunto}")
     else:

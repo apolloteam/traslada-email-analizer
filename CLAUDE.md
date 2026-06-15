@@ -58,13 +58,13 @@ src/analyzer.py                 Integración con Claude (claude-sonnet-4-6). Car
                                 Devuelve un EmailDecision validado por Pydantic.
 
 src/actions.py                  Ejecuta la decisión de Claude delegando en mail_client.
-                                Soporta draft mode (responder_como_draft=True) y acción
+                                Soporta draft mode (borrador=True) y acción
                                 combinada responder_y_reenviar.
 
 src/models/email_decision.py    Pydantic BaseModel con los campos de la decisión de
                                 Claude: accion, razon, respuesta_html, reenviar_a,
                                 comentario_reenvio, prioridad, categorias,
-                                carpeta_archivo, responder_como_draft,
+                                carpeta_archivo, borrador,
                                 red_flags_detectados, escalar_a.
 
 src/utils/email_parser.py       Convierte HTML de email a texto plano limpio. Normaliza

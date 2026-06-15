@@ -35,7 +35,7 @@ class EmailDecision(BaseModel):
     carpeta_archivo: Optional[str] = None
     """Nombre de la carpeta de Outlook a la que mover el correo al cerrar la conversación. None = no mover."""
 
-    responder_como_draft: bool = False
+    borrador: bool = False
     """Si es True, la respuesta se guarda como borrador en lugar de enviarse directamente."""
 
     red_flags_detectados: list[str] = []
