@@ -252,7 +252,7 @@ El correo no corresponde a una gestión comercial sino a otra área: reclamos, a
 - `reenviar_a`: según el área que corresponda, elegí UN destino de esta tabla:
   - Soporte técnico / incidentes de sistema → reservas@traslada.com.ar
   - Facturación, pagos, comprobantes → administracion@traslada.com.ar
-  - Operaciones / consultas post-reserva (estado, cambios, cancelaciones) → operaciones@traslada.com.ar
+  - Operaciones / consultas post-reserva (estado, cambios, cancelaciones) → reservas@traslada.com.ar
   - Gestión de choferes → flota@traslada.com.ar
   - Atención al cliente / reclamos / objetos perdidos → sac@traslada.com.ar
 - `comentario_reenvio`: 🔀 Correo recibido en Ventas que corresponde a esta área. Derivado para su gestión.
@@ -265,7 +265,5 @@ Cuando determinés que la conversación está completamente resuelta (el cliente
 
 - El cliente aceptó un presupuesto o contrató el servicio → `"Comercial/Cerrado"`
 - La solicitud fue rechazada (fuera de servicio, sin disponibilidad, no aplica) → `"Comercial/NoAtendible"`
-- El reclamo fue resuelto y el cliente confirmó conformidad → `"Reclamos/Resuelto"`
-- Consulta de facturación resuelta → `"Administracion/Resuelto"`
 
 Si la conversación sigue abierta, el cliente no respondió, o hay dudas → dejá `carpeta_archivo` en null.
