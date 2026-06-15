@@ -17,7 +17,7 @@ from zoneinfo import ZoneInfo
 
 _DIR = os.path.dirname(os.path.abspath(__file__))
 
-from mail_client import MailClient
+from mail_client import MailClient, DOMINIOS_INTERNOS
 from analyzer import AnalizadorClaude, MODELO
 from actions import ejecutar_accion
 from models.email_decision_log import EmailDecisionLog
@@ -140,7 +140,6 @@ def ciclo(mail_client: MailClient, analizador: AnalizadorClaude):
             remitente = correo.get("from", {}).get("emailAddress", {}).get("address", "")
             direction = 1 if remitente.lower() == mail_client.buzon.lower() else 0  # 0=recibido, 1=enviado
             correo["direction"] = direction
-            dominios_internos = ["traslada.com.ar", "dottransfers.com"]
             dominio_remitente = remitente.split("@")[-1].lower()
 
             # ── Filtros previos al análisis ───────────────────────────────────────────────────────
@@ -154,10 +153,16 @@ def ciclo(mail_client: MailClient, analizador: AnalizadorClaude):
                 mail_client.marcar_procesado(correo["id"])
                 continue
 
-            if dominio_remitente in dominios_internos:
-                log.info(f"  ⏭ Correo interno ({remitente}), ignorando.")
-                mail_client.marcar_procesado(correo["id"])
-                continue
+            if dominio_remitente in DOMINIOS_INTERNOS:
+                # Excepción: correo interno derivado. El agente setea replyTo=cliente al derivar,
+                # esa señal indica que el correo debe analizarse (no ignorarse) en el buzón destino.
+                reply_to_list = correo.get("replyTo", [])
+                tiene_reply_to = bool(reply_to_list and reply_to_list[0].get("emailAddress", {}).get("address"))
+                if not tiene_reply_to:
+                    log.info(f"  ⏭ Correo interno sin replyTo ({remitente}), ignorando.")
+                    mail_client.marcar_procesado(correo["id"])
+                    continue
+                log.info(f"  ✅ Correo interno derivado ({remitente}), pasando al análisis.")
             # ──────────────────────────────────────────────────────────────────────────────────────
 
             # ── A partir de acá el correo se analiza: SIEMPRE se loguea a DB ──────────

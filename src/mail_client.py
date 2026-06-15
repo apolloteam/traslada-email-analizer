@@ -15,6 +15,7 @@ log = logging.getLogger(__name__)
 
 GRAPH = "https://graph.microsoft.com/v1.0"
 CATEGORIA_PROCESADO = "AgenteProcesado"   # categoría que se crea en Outlook
+DOMINIOS_INTERNOS = ["traslada.com.ar", "dottransfers.com"]
 
 
 class MailClient:
@@ -140,7 +141,7 @@ class MailClient:
     # ── Acciones ──────────────────────────────────────────────────
 
     def responder(self, message_id: str, cuerpo_html: str) -> None:
-        """Responde al correo original."""
+        """Responde al correo original (va al 'from')."""
         url = f"{GRAPH}/users/{self.buzon}/messages/{message_id}/reply"
         payload = {
             "message": {
@@ -149,6 +150,22 @@ class MailClient:
             "comment": ""
         }
         self._request_con_retry("POST", url, json=payload)
+
+    def responder_a_reply_to(self, message_id: str, cuerpo_html: str, reply_to_address: str) -> None:
+        """
+        Responde redirigiendo al reply_to en lugar del from. Mantiene threading en el buzón propio.
+        Flujo: createReply → PATCH toRecipients → send (3 llamadas; garantiza que el destinatario sea
+        reply_to_address y no el from original, que en correos derivados es otro buzón interno).
+        """
+        url_create = f"{GRAPH}/users/{self.buzon}/messages/{message_id}/createReply"
+        payload_create = {"message": {"body": {"contentType": "HTML", "content": cuerpo_html}}}
+        r = self._request_con_retry("POST", url_create, json=payload_create)
+        draft_id = r.json()["id"]
+        url_patch = f"{GRAPH}/users/{self.buzon}/messages/{draft_id}"
+        payload_patch = {"toRecipients": [{"emailAddress": {"address": reply_to_address}}]}
+        self._request_con_retry("PATCH", url_patch, json=payload_patch)
+        url_send = f"{GRAPH}/users/{self.buzon}/messages/{draft_id}/send"
+        self._request_con_retry("POST", url_send)
 
     def crear_draft_respuesta(self, message_id: str, cuerpo_html: str) -> None:
         """Crea un borrador de respuesta en la carpeta Drafts sin enviarlo."""
@@ -161,7 +178,7 @@ class MailClient:
         self._request_con_retry("POST", url, json=payload)
 
     def reenviar(self, message_id: str, destinatarios: list[str], comentario: str = "") -> None:
-        """Reenvía el correo a una lista de destinatarios."""
+        """Reenvía el correo a destinatarios externos (escalaciones, notificaciones)."""
         to_list = [{"emailAddress": {"address": e}} for e in destinatarios]
         url = f"{GRAPH}/users/{self.buzon}/messages/{message_id}/forward"
         payload = {
@@ -169,6 +186,23 @@ class MailClient:
             "toRecipients": to_list,
         }
         self._request_con_retry("POST", url, json=payload)
+
+    def derivar(self, message_id: str, destinatarios: list[str], reply_to_address: str, comentario: str = "") -> None:
+        """
+        Deriva el correo a buzones internos seteando replyTo=cliente original, para que cuando
+        el buzón destino responda, la respuesta vaya al cliente y no a quien derivó.
+        Flujo: createForward → PATCH replyTo → send (3 llamadas; /forward directo no expone replyTo).
+        """
+        to_list = [{"emailAddress": {"address": e}} for e in destinatarios]
+        url_create = f"{GRAPH}/users/{self.buzon}/messages/{message_id}/createForward"
+        payload_create = {"comment": comentario, "toRecipients": to_list}
+        r = self._request_con_retry("POST", url_create, json=payload_create)
+        draft_id = r.json()["id"]
+        url_patch = f"{GRAPH}/users/{self.buzon}/messages/{draft_id}"
+        payload_patch = {"replyTo": [{"emailAddress": {"address": reply_to_address}}]}
+        self._request_con_retry("PATCH", url_patch, json=payload_patch)
+        url_send = f"{GRAPH}/users/{self.buzon}/messages/{draft_id}/send"
+        self._request_con_retry("POST", url_send)
 
     def enviar_nuevo(self, destinatario: str, asunto: str, cuerpo_html: str) -> None:
         """Envía un correo nuevo (no como respuesta)."""

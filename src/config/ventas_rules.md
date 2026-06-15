@@ -233,8 +233,33 @@ Correo con pliego, concurso, licitación, RFQ/RFP, proceso de selección de prov
 - `categorias`: ["Comercial", "Licitación", "⭐ Prioritario"]
 - `borrador`: true
 
+### 📢🔀 Regla - Derivación a otra área
 
-### 📢 Regla - Archivo de conversaciones finalizadas
+#### Condiciones
+El correo no corresponde a una gestión comercial sino a otra área: reclamos, atención al cliente, soporte técnico, facturación, operaciones, gestión de choferes/prestadores.
+
+#### Ejemplos que aplican
+- "el chofer no llegó", "quiero cancelar mi reserva de mañana", "necesito cambiar el horario de un viaje ya agendado".
+- "necesito la factura del viaje del martes", "tengo un problema con un pago".
+- "soy chofer y no puedo acceder a la app".
+
+#### Ejemplos que NO aplican
+- Consultas de precio o presupuesto de un traslado nuevo (eso es Consulta comercial).
+- Reclamos que la regla "Reclamo de cliente" de este buzón ya contempla.
+
+#### Campos de decisión
+- `accion`: reenviar
+- `reenviar_a`: según el área que corresponda, elegí UN destino de esta tabla:
+  - Soporte técnico / incidentes de sistema → reservas@traslada.com.ar
+  - Facturación, pagos, comprobantes → administracion@traslada.com.ar
+  - Operaciones / consultas post-reserva (estado, cambios, cancelaciones) → operaciones@traslada.com.ar
+  - Gestión de choferes → flota@traslada.com.ar
+  - Atención al cliente / reclamos / objetos perdidos → sac@traslada.com.ar
+- `comentario_reenvio`: 🔀 Correo recibido en Ventas que corresponde a esta área. Derivado para su gestión.
+- `categorias`: ["Derivado"]
+- `carpeta_archivo`: "Redirigidos"
+
+### 📢📁 Regla - Archivo de conversaciones finalizadas
 
 Cuando determinés que la conversación está completamente resuelta (el cliente agradeció, confirmó conformidad, o el tema claramente no requiere seguimiento), asigná `carpeta_archivo` con la carpeta correspondiente:
 
