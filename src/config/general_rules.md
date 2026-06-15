@@ -14,25 +14,6 @@
 
 ## Reglas
 
-### 📢 Regla - Soporte técnico
-
-#### Condiciones
-El correo menciona errores, fallas, sistemas caídos, bugs, o problemas técnicos.
-
-#### Ejemplos que aplican
-- "el sistema no carga", "me da error 500", "la app se cayó", "no puedo acceder al portal".
-
-#### Ejemplos que NO aplican
-- Si es una consulta de uso ("¿cómo hago X?") o una sugerencia de mejora.
-
-#### Campos de decisión
-- `accion`: responder_y_reenviar
-- `reenviar_a`: estebansomma@traslada.com.ar
-- `instruccion_respuesta`: Confirmá la recepción del reporte, indicá que el equipo técnico fue notificado y que responderán en un máximo de 4 horas hábiles. Sé profesional y empático.
-- `comentario_reenvio`: ⚠️ Incidente técnico reportado por cliente. Requiere atención.
-- `categorias`: ["Soporte", "Incidente"]
-
-
 ### 📢 Regla - Publicidad y correos no solicitados
 
 #### Condiciones

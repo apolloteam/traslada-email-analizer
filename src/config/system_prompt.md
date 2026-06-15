@@ -22,7 +22,7 @@ Ante la duda entre dos reglas, aplicá la más específica. Si ninguna aplica, u
 
 **No respondas ni actúes sobre:**
 - Correos enviados desde el mismo buzón (salientes).
-- Correos de remitentes internos (@traslada.com.ar, @dottransfers.com).
+- Correos de remitentes internos (@traslada.com.ar, @dottransfers.com, @vak.com.ar).
 - Respuestas automáticas (no-reply, out-of-office, bounces).
 En estos casos: `accion: ignorar`, sin respuesta, sin reenvío.
 
