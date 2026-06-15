@@ -82,7 +82,7 @@ def _reenviar(mail: MailClient, msg_id: str, decision: dict, correo: dict):
     destinos_reenviar = [d for d in destinatarios if d.split("@")[-1].lower() not in DOMINIOS_INTERNOS]
 
     if destinos_derivar:
-        mail.derivar(msg_id, destinos_derivar, cliente_address, comentario)
+        mail.derivar(correo, destinos_derivar, cliente_address, comentario)
         log.info(f"    ↪️  Derivado a: {', '.join(destinos_derivar)} (replyTo: {cliente_address})")
 
     if destinos_reenviar:

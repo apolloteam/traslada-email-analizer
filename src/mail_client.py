@@ -187,22 +187,45 @@ class MailClient:
         }
         self._request_con_retry("POST", url, json=payload)
 
-    def derivar(self, message_id: str, destinatarios: list[str], reply_to_address: str, comentario: str = "") -> None:
+    def derivar(self, correo: dict, destinatarios: list[str], reply_to_address: str, comentario: str = "") -> None:
         """
-        Deriva el correo a buzones internos seteando replyTo=cliente original, para que cuando
-        el buzón destino responda, la respuesta vaya al cliente y no a quien derivó.
-        Flujo: createForward → PATCH replyTo → send (3 llamadas; /forward directo no expone replyTo).
+        Deriva el correo a buzones internos via sendMail, seteando replyTo=cliente original.
+        Usa sendMail (no createForward) porque Exchange descarta el replyTo al enviar un forward.
+        Construye manualmente el cuerpo citado con los datos del correo original.
         """
+        from_info  = correo.get("from", {}).get("emailAddress", {})
+        from_name  = from_info.get("name", "")
+        from_addr  = from_info.get("address", "")
+        from_label = f"{from_name} &lt;{from_addr}&gt;" if from_name else from_addr
+
+        asunto_orig = correo.get("subject", "(sin asunto)")
+        fecha       = correo.get("receivedDateTime", "")
+        cuerpo_orig = correo.get("body", {}).get("content", "")
+
+        asunto_fw = asunto_orig if asunto_orig.upper().startswith("FW:") else f"FW: {asunto_orig}"
+
+        comentario_html = f"<p>{comentario}</p>" if comentario else ""
+        cuerpo_html = (
+            f"{comentario_html}"
+            f"<hr>"
+            f"<p><b>De:</b> {from_label}<br>"
+            f"<b>Enviado:</b> {fecha}<br>"
+            f"<b>Asunto:</b> {asunto_orig}</p>"
+            f"<div>{cuerpo_orig}</div>"
+        )
+
         to_list = [{"emailAddress": {"address": e}} for e in destinatarios]
-        url_create = f"{GRAPH}/users/{self.buzon}/messages/{message_id}/createForward"
-        payload_create = {"comment": comentario, "toRecipients": to_list}
-        r = self._request_con_retry("POST", url_create, json=payload_create)
-        draft_id = r.json()["id"]
-        url_patch = f"{GRAPH}/users/{self.buzon}/messages/{draft_id}"
-        payload_patch = {"replyTo": [{"emailAddress": {"address": reply_to_address}}]}
-        self._request_con_retry("PATCH", url_patch, json=payload_patch)
-        url_send = f"{GRAPH}/users/{self.buzon}/messages/{draft_id}/send"
-        self._request_con_retry("POST", url_send)
+        url = f"{GRAPH}/users/{self.buzon}/sendMail"
+        payload = {
+            "message": {
+                "subject": asunto_fw,
+                "body": {"contentType": "HTML", "content": cuerpo_html},
+                "toRecipients": to_list,
+                "replyTo": [{"emailAddress": {"address": reply_to_address}}],
+            },
+            "saveToSentItems": True,
+        }
+        self._request_con_retry("POST", url, json=payload)
 
     def enviar_nuevo(self, destinatario: str, asunto: str, cuerpo_html: str) -> None:
         """Envía un correo nuevo (no como respuesta)."""
