@@ -47,11 +47,16 @@ Para que el equipo comercial pueda cotizar, hacen falta:
 - Cantidad de pasajeros.
 - Cantidad de equipaje.
 
+Datos adicionales solo para servicios Periódicos/Recurrentes:
+- Días y horarios.
+- Fecha de inicio.
+- Recorrido y paradas (opcional)
+
 ### Vocabulario
 - Servicio Remís: Traslado en auto de hasta 4 pasajeros.
 - Servicio Grupal: Traslado en vans, minibuses, buses (más de 4 pasajeros).
 - Servicio Eventual: Traslado ocasional de una única vez, evento específico.
-- Servicio con periodicidad/perriódico/recurrente: Traslado preestablecido (mismas direcciones y horario)q ue se repite periódicamente.
+- Servicio Perriódico/Recurrente: Traslado preestablecido, mismas direcciones y horario, que se repite periódicamente (diario, semanal, mensual, etc.).
 
 ## Tono para este buzón
 
@@ -155,18 +160,6 @@ El correo pregunta por precios, cotizaciones, presupuestos de un traslado de rem
 - `categorias`: ["Comercial", "B2B", "Remis", "Lead"]
 - `borrador`: true
 
-
-
-
-
-
-
-
-
-
-
-
-
 ### 📢 Regla - Consulta de servicio Grupal Eventual **B2B** (datos faltantes)
 
 #### Condiciones
@@ -175,7 +168,7 @@ El correo pregunta por precios, cotizaciones, presupuestos de un traslado grupal
 #### Campos de decisión
 - `accion`: responder_y_reenviar
 - `reenviar_a`: vstaque@traslada.com.ar;jgomezmoreno@traslada.com.ar;rodrigosalinas@traslada.com.ar
-- `instruccion_respuesta`: Agradecé el interés, informá que un asesor comercial se contactará en breve con una propuesta personalizada. Incluí el nombre del solicitante y la empresa si figura en el correo.
+- `instruccion_respuesta`: Agradecé el interés. Informá que una vez que tengamos todos los datos, un asesor comercial se contactará con una propuesta personalizada. Incluí el nombre de la persona y de la empresa si figura en el correo.
 - `comentario_reenvio`: 🚌 FYI - Oportunidad de servicio GRUPAL Eventual BTB entrante. Se le pidieron datos faltantes - 👀 Controlar.
 - `categorias`: ["Comercial", "B2B", "Grupal", "Lead"]
 - `borrador`: true
@@ -197,53 +190,48 @@ El correo pregunta por precios, cotizaciones, presupuestos de un traslado grupal
 - `categorias`: ["Comercial", "B2B", "Grupal", "Lead"]
 - `borrador`: true
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-### 📢 Regla - Reclamo de cliente
+### 📢 Regla - Consulta de servicio Recurrente **B2B** (datos faltantes)
 
 #### Condiciones
-El correo expresa insatisfacción, reclamo, queja, o menciona palabras como "mal servicio", "decepcionado", "exijo", "no funciona", "problema con mi traslado".
-
-#### Ejemplos que aplican
-"estoy muy disconforme", "exijo una solución", "el pedido llegó mal", "nunca me respondieron".
-
-#### Ejemplos que NO aplican
-- Si es un reporte técnico puntual sin tono de queja — esos van a Soporte técnico.
+El correo pregunta por precios, cotizaciones, presupuestos, contratación periódica de un traslado con una contratación periódica y encaja en el perfil B2B pero no están todos los datos mínimos requeridos.
 
 #### Campos de decisión
 - `accion`: responder_y_reenviar
-- `reenviar_a`: estebansomma@traslada.com.ar
-- `instruccion_respuesta`: Pedí disculpas sinceras por la experiencia negativa. Indicá que escalaste el caso y que alguien de atención al cliente se contactará en las próximas 2 horas. No prometás soluciones específicas todavía.
-- `comentario_reenvio`: 🚨 RECLAMO DE CLIENTE — Requiere atención prioritaria.
-- `categorias`: ["Reclamo"]
+- `reenviar_a`: vstaque@traslada.com.ar;jgomezmoreno@traslada.com.ar;rodrigosalinas@traslada.com.ar
+- `instruccion_respuesta`: Agradecé el interés. Informá que una vez que tengamos todos los datos, un asesor comercial se contactará con una propuesta personalizada. Incluí el nombre de la persona y de la empresa si figura en el correo.
+- `comentario_reenvio`: 📅 FYI - Oportunidad de contrato BTB entrante. Se le pidieron datos faltantes - 👀 Controlar.
+- `categorias`: ["Comercial", "B2B", "Charter", "Lead", "⭐ Prioritario"]
+- `borrador`: true
+- `carpeta_archivo`: `"Comercial/Analizado"`
 
-
-### 📢 Regla - Facturación y administración
+### 📢 Regla - Consulta de servicio Recurrente **B2B** (datos completos)
 
 #### Condiciones
-El correo menciona facturas, pagos, transferencias, comprobantes, cuentas corrientes, o administración.
-
-#### Ejemplos que aplican
-- "adjunto la factura", "necesito el comprobante de pago", "consulta sobre mi cuenta corriente", "¿puedo pagar en cuotas?".
+El correo pregunta por precios, cotizaciones, presupuestos, contratación periódica de un traslado con una contratación periódica y encaja en el perfil B2B y están todos los datos mínimos requeridos.
 
 #### Campos de decisión
-- `accion`: reenviar
-- `reenviar_a`: estebansomma@traslada.com.ar
-- `comentario_reenvio`: 📄 Consulta de facturación/administración.
+- `accion`: responder_y_reenviar
+- `reenviar_a`: vstaque@traslada.com.ar;jgomezmoreno@traslada.com.ar;rodrigosalinas@traslada.com.ar
+- `instruccion_respuesta`:
+  - Agradecé el interés (si no lo hiciste antes).
+  - Informá que un asesor comercial se contactará en breve con una propuesta personalizada. Incluí el nombre del solicitante y la empresa si figura en el correo.
+  - Si detectas que hay conversaciones previas en la que le pediste los datos faltantes, agradecele por haber suministrado la información.
+- `comentario_reenvio`: 📅 FYA - Oportunidad de contrato BTB. 🙋‍♂️ Contactar al cliente.
+- `categorias`: ["Comercial", "B2B", "Charter", "Lead", "⭐ Prioritario"]
+- `borrador`: true
+
+### 📢 Regla - Licitación o concurso de precios
+
+#### Condiciones
+Correo con pliego, concurso, licitación, RFQ/RFP, proceso de selección de proveedores, o documentación licitatoria adjunta.
+
+#### Campos de decisión
+- `accion`: responder_y_reenviar
+- `reenviar_a`: vstaque@traslada.com.ar;jgomezmoreno@traslada.com.ar;rodrigosalinas@traslada.com.ar
+- `instruccion_respuesta`: Tono formal. Confirmar recepción de documentación. Indicar que equipo comercial fue notificado y trabajará en la propuesta. Si hay fecha límite, reconocerla. No comprometer condiciones.
+- `comentario_reenvio`: 🧾 FYA - Licitación. 🙋‍♂️ Analizar.
+- `categorias`: ["Comercial", "Licitación", "⭐ Prioritario"]
+- `borrador`: true
 
 
 ### 📢 Regla - Archivo de conversaciones finalizadas
