@@ -8,6 +8,7 @@ Uso:
 """
 
 import os
+import re
 import time
 import json
 import logging
@@ -21,6 +22,7 @@ from mail_client import MailClient, DOMINIOS_INTERNOS
 from analyzer import AnalizadorClaude, MODELO
 from actions import ejecutar_accion
 from models.email_decision_log import EmailDecisionLog
+from utils.email_parser import extraer_texto_body
 import db_logger
 
 # ── Logging ────────────────────────────────────────────────────────
@@ -39,6 +41,25 @@ log = logging.getLogger(__name__)
 
 
 TZ_ARGENTINA = ZoneInfo("America/Argentina/Buenos_Aires")
+
+
+# Remitente y patrón de asunto que identifican un lead de formulario web.
+LEAD_REMITENTE = "noreply@traslada.com.ar"
+LEAD_ASUNTO_PATRON = "nuevo lead - source:"
+
+
+def extraer_email_de_lead(body_texto: str) -> str | None:
+    """
+    Extrae el email del campo 'E-mail:' de un lead de formulario web.
+    Contempla variantes: 'E-mail', 'Email', 'E mail', con o sin mayúsculas.
+    Devuelve el email en minúsculas, o None si no lo encuentra.
+    """
+    m = re.search(
+        r"e[\-\s]?mail\s*:\s*([A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,})",
+        body_texto or "",
+        re.IGNORECASE,
+    )
+    return m.group(1).lower() if m else None
 
 
 def _a_hora_argentina(valor) -> str | None:
@@ -148,7 +169,33 @@ def ciclo(mail_client: MailClient, analizador: AnalizadorClaude):
                 mail_client.marcar_procesado(correo["id"])
                 continue
 
-            if remitente.lower().startswith("no-reply") or remitente.lower().startswith("noreply"):
+            # Detección de lead de formulario web: viene de noreply@ interno y el asunto
+            # tiene el patrón de lead. Extraemos el email del cuerpo y lo inyectamos como
+            # replyTo, para que el resto del sistema lo trate igual que un correo con
+            # remitente real (que la respuesta vaya al cliente del formulario, no a noreply@).
+            # Ejemplo: "Nuevo lead - Source: WebClientesTraslada" con body que incluye "E-mail: cliente@example.com".
+            es_lead_form = (
+                remitente.lower() == LEAD_REMITENTE
+                and LEAD_ASUNTO_PATRON in correo.get("subject", "").lower()
+            )
+
+            # Si es un lead de formulario web, extraemos el email del body y lo seteamos como replyTo.
+            if es_lead_form:
+                email_cliente = extraer_email_de_lead(extraer_texto_body(correo))
+                if email_cliente:
+                    correo["replyTo"] = [{"emailAddress": {"address": email_cliente}}]
+                    log.info(f"  📨 Lead de formulario web. Cliente: {email_cliente}")
+                else:
+                    # Sin email no podemos responderle al cliente. No lo procesamos
+                    # (responderíamos a noreply@ y se perdería); lo dejamos para revisión manual.
+                    log.warning(f"  ⚠️ No se pudo extraer el email del body del lead. Asunto: '{correo.get('subject','')}'")
+                    mail_client.mover_a_carpeta(correo["id"], "Errores/LeadSinEmail")
+                    mail_client.marcar_procesado(correo["id"])
+                    continue
+
+            # Remitente automático (no-reply / noreply): se ignora, EXCEPTO si es un lead
+            # de formulario web (esos se procesan, ya con su replyTo seteado arriba).
+            if not es_lead_form and (remitente.lower().startswith("no-reply") or remitente.lower().startswith("noreply")):
                 log.info(f"  ⏭ Remitente automático, ignorando.")
                 mail_client.marcar_procesado(correo["id"])
                 continue

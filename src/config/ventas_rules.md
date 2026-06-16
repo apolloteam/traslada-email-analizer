@@ -155,7 +155,6 @@ El correo pregunta por precios, cotizaciones o presupuestos de un traslado grupa
 - `accion`: responder_y_reenviar
 - `reenviar_a`: vstaque@traslada.com.ar;jgomezmoreno@traslada.com.ar;rodrigosalinas@traslada.com.ar
 - `categorias`: ["Comercial", "B2B", "Grupal", "Lead"]
-- `borrador`: true
 - `instruccion_respuesta`:
   - Agradecé el interés (si no lo hiciste en un mensaje anterior del hilo).
   - **Según si están los datos mínimos requeridos** (ver la base de conocimiento del buzón):
@@ -168,6 +167,9 @@ El correo pregunta por precios, cotizaciones o presupuestos de un traslado grupa
 - `carpeta_archivo`:
   - **Si faltan datos:** "Comercial/Analizado"
   - **Si están completos:** null
+- `borrador`:
+  - **Si faltan datos:** false
+  - **Si están completos:** true
 
 ### 📢 Regla - Consulta de servicio Recurrente **B2B**
 
@@ -178,7 +180,6 @@ El correo pregunta por precios, cotizaciones, presupuestos o contratación peri�
 - `accion`: responder_y_reenviar
 - `reenviar_a`: vstaque@traslada.com.ar;jgomezmoreno@traslada.com.ar;rodrigosalinas@traslada.com.ar
 - `categorias`: ["Comercial", "B2B", "Charter", "Lead", "⭐ Prioritario"]
-- `borrador`: true
 - `instruccion_respuesta`:
   - Agradecé el interés (si no lo hiciste en un mensaje anterior del hilo).
   - **Según si están los datos mínimos requeridos** (ver la base de conocimiento del buzón):
@@ -191,6 +192,9 @@ El correo pregunta por precios, cotizaciones, presupuestos o contratación peri�
 - `carpeta_archivo`:
   - **Si faltan datos:** "Comercial/Analizado"
   - **Si están completos:** null
+- `borrador`:
+  - **Si faltan datos:** false
+  - **Si están completos:** true
 
 ### 📢 Regla - Licitación o concurso de precios
 
