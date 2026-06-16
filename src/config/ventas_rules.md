@@ -47,6 +47,7 @@ Para que el equipo comercial pueda cotizar, hacen falta:
 - Origen y destino del traslado.
 - Cantidad de pasajeros.
 - Cantidad de equipaje.
+- Con retorno (si se debe incluir la vuelta al origen).
 
 Datos adicionales solo para servicios Periódicos/Recurrentes:
 - Días y horarios o frecuencia estemada (diaria, semanal, etc.).
@@ -72,7 +73,7 @@ Complementa el tono base con:
 ### 📢 Regla - Consulta de servicio de remís **B2C**
 
 #### Condiciones
-El correo pregunta por precios, cotizaciones, presupuestos de un traslado de remís y encaja en el perfil B2C.
+El correo pregunta por precios, cotizaciones, presupuestos de un traslado de remís y encaja en el perfil B2C. **También aplica si el asunto contiene "Source: WebTrasladaPresupuesto"** (lead del formulario web de presupuestos de remís, que puede ser B2B o B2C).
 
 #### Ejemplos que NO aplican
 En caso que ya le hayas indicado que utilice los canales para B2C y haya solicitado nuevamente asesoramiento personalizado.
@@ -127,7 +128,7 @@ El correo pregunta por precios, cotizaciones o presupuestos de un traslado grupa
 ### 📢 Regla - Consulta de servicio de remís **B2B**
 
 #### Condiciones
-El correo pregunta por precios, cotizaciones o presupuestos de un traslado de remís, y encaja en el perfil B2B.
+El correo pregunta por precios, cotizaciones o presupuestos de un traslado de remís, y encaja en el perfil B2B. **También aplica si el asunto contiene "Source: WebTrasladaPresupuesto"** (lead del formulario web de presupuestos de remís, que puede ser B2B o B2C).
 
 #### Campos de decisión
 - `accion`: responder_y_reenviar
@@ -174,7 +175,7 @@ El correo pregunta por precios, cotizaciones o presupuestos de un traslado grupa
 ### 📢 Regla - Consulta de servicio Recurrente **B2B**
 
 #### Condiciones
-El correo pregunta por precios, cotizaciones, presupuestos o contratación periódica de un traslado, y encaja en el perfil B2B.
+El correo pregunta por precios, cotizaciones, presupuestos o contratación periódica de un traslado, y encaja en el perfil B2B. **También aplica si el asunto contiene "Source: WebTrasladaCharters"** (lead del formulario web de charters, que corresponde a traslado de personal grupal recurrente B2B).
 
 #### Campos de decisión
 - `accion`: responder_y_reenviar
@@ -233,6 +234,32 @@ El correo no corresponde a una gestión comercial sino a otra área: reclamos, a
 - `comentario_reenvio`: 🔀 Correo recibido en Ventas que corresponde a esta área. Derivado para su gestión.
 - `categorias`: ["Derivado"]
 - `carpeta_archivo`: "Redirigidos"
+
+### 📢 Regla - Lead de formulario de Contacto
+
+#### Condiciones
+El asunto contiene "Source: WebTrasladaContacto". Es un lead del formulario de contacto general de la web, donde el cliente escribió un mensaje libre en el campo "Notas". El cliente real es el email del campo "E-mail:" del cuerpo.
+
+#### Campos de decisión
+- `accion`: responder_y_reenviar
+- `reenviar_a`: vstaque@traslada.com.ar;jgomezmoreno@traslada.com.ar
+- `categorias`: ["Comercial", "Lead", "Web"]
+- `borrador`: true
+- `instruccion_respuesta`:
+  - Leé el contenido del campo "Notas" del lead y respondé según lo que pida:
+    - **Si es una consulta por un traslado/viaje** (precios, presupuesto, disponibilidad): tratala como una consulta comercial. Si faltan datos mínimos requeridos (ver base de conocimiento del buzón), pedilos amablemente e informá que un asesor lo contactará. Si están todos los datos, informá que un asesor lo contactará en breve con una propuesta.
+    - **Si es una consulta general que podés responder con la base de conocimiento del buzón** (ej. zonas donde operamos, tipos de servicio): respondela directamente, de forma clara y cordial.
+    - **Si es cualquier otra cosa** o no podés resolverla: saludá, confirmá la recepción del mensaje e informá que nos pondremos en contacto a la brevedad. No inventes información.
+  - Tratá al cliente por su nombre (campo "Nombre" del lead) si está disponible.
+
+### 📢 Regla - Lead de registro en la app (informativo)
+
+#### Condiciones
+El asunto contiene "Source: WebClientesTraslada". Es una notificación informativa de que un cliente se registró en la app. No requiere ninguna acción ni respuesta.
+
+#### Campos de decisión
+- `accion`: ignorar
+- `categorias`: ["Web", "Registro"]
 
 ### 📢📁 Regla - Archivo de conversaciones finalizadas
 

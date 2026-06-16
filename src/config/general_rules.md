@@ -38,9 +38,14 @@ El correo es claramente promocional, publicitario, o una oferta no solicitada de
 
 #### Condiciones
 Cualquier correo que no encaje en las reglas anteriores y sea de un remitente externo.
-No aplica a correos internos del dominio traslada.com.ar, dottransfers.com y vak.com.ar.
+
+No aplica a correos internos del dominio traslada.com.ar, dottransfers.com y vak.com.ar, **excepto los leads de formularios web (asunto "Nuevo lead - Source:"), que aunque vengan de un remitente interno deben procesarse con su regla correspondiente.**
 
 #### Campos de decisión
 - `accion`: responder
 - `instruccion_respuesta`: Agradecé el contacto. Indica que revisaremos su mensaje y responderán a la brevedad. No detalles más información.
 - `categorias`: ["Ignorar"]
+
+## Leads de formularios web
+Los correos con asunto que empieza con "Nuevo lead - Source:" son leads generados por los formularios de nuestras webs. Aunque el remitente sea un correo interno (@traslada.com.ar), NO son correos internos a ignorar: representan a un CLIENTE EXTERNO que completó un formulario. El cliente real es el email del campo "E-mail:" del cuerpo. 
+Estos correos SÍ deben procesarse según la regla de lead que corresponda a su Source.

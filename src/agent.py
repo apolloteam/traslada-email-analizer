@@ -44,7 +44,7 @@ TZ_ARGENTINA = ZoneInfo("America/Argentina/Buenos_Aires")
 
 
 # Remitente y patrón de asunto que identifican un lead de formulario web.
-LEAD_REMITENTE = "noreply@traslada.com.ar"
+LEAD_REMITENTE = "backup@traslada.com.ar" #"noreply@traslada.com.ar" # ??????????????????????? cambiar esto!!!!!!!!!!!!
 LEAD_ASUNTO_PATRON = "nuevo lead - source:"
 
 
