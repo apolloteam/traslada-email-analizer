@@ -73,7 +73,7 @@ Complementa el tono base con:
 ### 📢 Regla - Consulta de servicio de remís **B2C**
 
 #### Condiciones
-El correo pregunta por precios, cotizaciones, presupuestos de un traslado de remís y encaja en el perfil B2C. **También aplica si el asunto contiene "Source: WebTrasladaPresupuesto"** (lead del formulario web de presupuestos de remís, que puede ser B2B o B2C).
+El correo pregunta por precios, cotizaciones, presupuestos de un traslado de remís y encaja en el perfil B2C. También aplica si el asunto contiene "Source: WebTrasladaPresupuesto" y el lead es de un particular (perfil B2C) para un servicio de remís.
 
 #### Ejemplos que NO aplican
 En caso que ya le hayas indicado que utilice los canales para B2C y haya solicitado nuevamente asesoramiento personalizado.
@@ -81,9 +81,7 @@ En caso que ya le hayas indicado que utilice los canales para B2C y haya solicit
 #### Campos de decisión
 - `accion`: responder
 - `instruccion_respuesta`:
-  Tratá al cliente por su nombre si lo detectás en el correo. Agradecé el interés e
-  informá los canales para reservas B2C. Usá el siguiente ejemplo como modelo de tono,
-  estructura y formato HTML, adaptando el nombre y el contenido al correo real:
+  Tratá al cliente por su nombre si lo detectás en el correo. Agradecé el interés e informá los canales para reservas B2C. Usá el siguiente ejemplo como modelo de tono, estructura y formato HTML, adaptando el nombre y el contenido al correo real:
 
 ```
   <p>Hola Gonzalo,</p>
@@ -106,7 +104,7 @@ En caso que ya le hayas indicado que utilice los canales para B2C y haya solicit
 ### 📢 Regla - Consulta de servicio Grupal **B2C**
 
 #### Condiciones
-El correo pregunta por precios, cotizaciones o presupuestos de un traslado grupal, y encaja en el perfil B2C.
+El correo pregunta por precios, cotizaciones o presupuestos de un traslado grupal, y encaja en el perfil B2C. También aplica si el asunto contiene "Source: WebTrasladaPresupuesto" y el lead es de un particular (perfil B2C) para un traslado grupal.
 
 #### Campos de decisión
 - `accion`: responder_y_reenviar
@@ -128,7 +126,7 @@ El correo pregunta por precios, cotizaciones o presupuestos de un traslado grupa
 ### 📢 Regla - Consulta de servicio de remís **B2B**
 
 #### Condiciones
-El correo pregunta por precios, cotizaciones o presupuestos de un traslado de remís, y encaja en el perfil B2B. **También aplica si el asunto contiene "Source: WebTrasladaPresupuesto"** (lead del formulario web de presupuestos de remís, que puede ser B2B o B2C).
+El correo pregunta por precios, cotizaciones o presupuestos de un traslado de remís, y encaja en el perfil B2B. También aplica si el asunto contiene "Source: WebTrasladaPresupuesto" y el lead es de una empresa (perfil B2B) para un servicio de remís.
 
 #### Campos de decisión
 - `accion`: responder_y_reenviar
@@ -150,7 +148,7 @@ El correo pregunta por precios, cotizaciones o presupuestos de un traslado de re
 ### 📢 Regla - Consulta de servicio Grupal Eventual **B2B**
 
 #### Condiciones
-El correo pregunta por precios, cotizaciones o presupuestos de un traslado grupal para una fecha o evento específico (Eventual), y encaja en el perfil B2B.
+El correo pregunta por precios, cotizaciones o presupuestos de un traslado grupal para una fecha o evento específico (Eventual), y encaja en el perfil B2B. También aplica si el asunto contiene "Source: WebTrasladaPresupuesto" y el lead es de una empresa (perfil B2B) para un traslado grupal puntual/eventual.
 
 #### Campos de decisión
 - `accion`: responder_y_reenviar
@@ -175,7 +173,7 @@ El correo pregunta por precios, cotizaciones o presupuestos de un traslado grupa
 ### 📢 Regla - Consulta de servicio Recurrente **B2B**
 
 #### Condiciones
-El correo pregunta por precios, cotizaciones, presupuestos o contratación periódica de un traslado, y encaja en el perfil B2B. **También aplica si el asunto contiene "Source: WebTrasladaCharters"** (lead del formulario web de charters, que corresponde a traslado de personal grupal recurrente B2B).
+El correo pregunta por precios, cotizaciones, presupuestos o contratación periódica de un traslado, y encaja en el perfil B2B. También aplica si el asunto contiene "Source: WebTrasladaCharters" (lead del formulario web de charters, que corresponde a traslado de personal grupal recurrente B2B).
 
 #### Campos de decisión
 - `accion`: responder_y_reenviar

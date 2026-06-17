@@ -42,9 +42,8 @@ log = logging.getLogger(__name__)
 
 TZ_ARGENTINA = ZoneInfo("America/Argentina/Buenos_Aires")
 
-
 # Remitente y patrón de asunto que identifican un lead de formulario web.
-LEAD_REMITENTE = "backup@traslada.com.ar" #"noreply@traslada.com.ar" # ??????????????????????? cambiar esto!!!!!!!!!!!!
+REMITENTE_LEAD  = os.getenv("REMITENTE_LEAD", "noreply@traslada.com.ar") # Ejemplo: noreply@traslada.com.ar
 LEAD_ASUNTO_PATRON = "nuevo lead - source:"
 
 
@@ -175,7 +174,8 @@ def ciclo(mail_client: MailClient, analizador: AnalizadorClaude):
             # remitente real (que la respuesta vaya al cliente del formulario, no a noreply@).
             # Ejemplo: "Nuevo lead - Source: WebClientesTraslada" con body que incluye "E-mail: cliente@example.com".
             es_lead_form = (
-                remitente.lower() == LEAD_REMITENTE
+                bool(REMITENTE_LEAD)
+                and remitente.lower() == REMITENTE_LEAD.lower()
                 and LEAD_ASUNTO_PATRON in correo.get("subject", "").lower()
             )
 

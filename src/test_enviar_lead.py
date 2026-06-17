@@ -25,7 +25,7 @@ from mail_client import MailClient, GRAPH
 
 # Buzón destino (el de prueba) y buzón remitente (simula el formulario)
 DESTINO = "aiemail1@traslada.com.ar"
-REMITENTE_LEAD = "noreply@traslada.com.ar"
+REMITENTE_LEAD = "noreply@traslada.com.ar" # Aquí tiene que ir harcodeado esto. No sabemos por que, al enviar desde test a noreply@traslada.com.ar, se recibe como backup@traslada.com.ar.
 
 
 def enviar_lead(source: str, email_cliente: str):

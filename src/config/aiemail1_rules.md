@@ -109,7 +109,7 @@ El correo pregunta por precios, cotizaciones o presupuestos de un traslado grupa
 
 #### Campos de decisión
 - `accion`: responder_y_reenviar
-- `reenviar_a`: vstaque@traslada.com.ar;jgomezmoreno@traslada.com.ar;rodrigosalinas@traslada.com.ar
+- `reenviar_a`: estebansomma@traslada.com.ar
 - `categorias`: ["Comercial", "B2C", "Grupal", "Lead"]
 - `instruccion_respuesta`:
   - Agradecé el interés (si no lo hiciste en un mensaje anterior del hilo).
@@ -131,7 +131,7 @@ El correo pregunta por precios, cotizaciones o presupuestos de un traslado de re
 
 #### Campos de decisión
 - `accion`: responder_y_reenviar
-- `reenviar_a`: mbfernandez@traslada.com.ar;rodrigosalinas@traslada.com.ar
+- `reenviar_a`: estebansomma@traslada.com.ar
 - `categorias`: ["Comercial", "B2B", "Remis", "Lead"]
 - `instruccion_respuesta`:
   - Agradecé el interés (si no lo hiciste en un mensaje anterior del hilo).
@@ -153,7 +153,7 @@ El correo pregunta por precios, cotizaciones o presupuestos de un traslado grupa
 
 #### Campos de decisión
 - `accion`: responder_y_reenviar
-- `reenviar_a`: vstaque@traslada.com.ar;jgomezmoreno@traslada.com.ar;rodrigosalinas@traslada.com.ar
+- `reenviar_a`: estebansomma@traslada.com.ar
 - `categorias`: ["Comercial", "B2B", "Grupal", "Lead"]
 - `instruccion_respuesta`:
   - Agradecé el interés (si no lo hiciste en un mensaje anterior del hilo).
@@ -178,7 +178,7 @@ El correo pregunta por precios, cotizaciones, presupuestos o contratación peri�
 
 #### Campos de decisión
 - `accion`: responder_y_reenviar
-- `reenviar_a`: vstaque@traslada.com.ar;jgomezmoreno@traslada.com.ar;rodrigosalinas@traslada.com.ar
+- `reenviar_a`: estebansomma@traslada.com.ar
 - `categorias`: ["Comercial", "B2B", "Charter", "Lead", "⭐ Prioritario"]
 - `instruccion_respuesta`:
   - Agradecé el interés (si no lo hiciste en un mensaje anterior del hilo).
@@ -203,7 +203,7 @@ Correo con pliego, concurso, licitación, RFQ/RFP, proceso de selección de prov
 
 #### Campos de decisión
 - `accion`: responder_y_reenviar
-- `reenviar_a`: vstaque@traslada.com.ar;jgomezmoreno@traslada.com.ar;rodrigosalinas@traslada.com.ar
+- `reenviar_a`: estebansomma@traslada.com.ar
 - `instruccion_respuesta`: Tono formal. Confirmar recepción de documentación. Indicar que equipo comercial fue notificado y trabajará en la propuesta. Si hay fecha límite, reconocerla. No comprometer condiciones.
 - `comentario_reenvio`: 🧾 FYA - Licitación. 🙋‍♂️ Analizar.
 - `categorias`: ["Comercial", "Licitación", "⭐ Prioritario"]

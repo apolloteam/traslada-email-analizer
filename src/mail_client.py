@@ -15,7 +15,7 @@ log = logging.getLogger(__name__)
 
 GRAPH = "https://graph.microsoft.com/v1.0"
 CATEGORIA_PROCESADO = "AgenteProcesado"   # categoría que se crea en Outlook
-DOMINIOS_INTERNOS = ["traslada.com.ar", "dottransfers.com"]
+DOMINIOS_INTERNOS = ["traslada.com.ar", "dottransfers.com", "vak.com.ar"]
 
 
 class MailClient:
