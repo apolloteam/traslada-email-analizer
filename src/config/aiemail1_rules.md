@@ -8,25 +8,25 @@
 - Remís ejecutivo:
   - Sedan Estándar: 
     - Máximo pasajeros: 4.
-    - Máximo equipaje: 2 valijas + 2 equipaje de mano (aproximado, según dimenciones estándares).
+    - Máximo equipaje: 2 valijas + 2 equipaje de mano (aproximado, según dimensiones estándares).
     - Código: `STD`
     - Descripción: Ideal para traslados corporativos.
     - Modelos: VW Nivus, Nissan Kicks, Peugeot 2008, Fiat Cronos o similares.
   - Sedan Ejecutivo: 
     - Máximo pasajeros: 4.
-    - Máximo equipaje: 2 valijas + 2 equipaje de mano (aproximado, según dimenciones estándares).
+    - Máximo equipaje: 2 valijas + 2 equipaje de mano (aproximado, según dimensiones estándares).
     - Código: `EJE`
     - Descripción: El más elegido por ejecutivos.
     - Modelos: Toyota Corolla, VW Virtus, Nissan Versa, VW Taos o similares.
   - Monovolumen:
     - Máximo pasajeros: 4.
-    - Máximo equipaje: 4 valijas + 4 equipaje de mano (aproximado, según dimenciones estándares).
+    - Máximo equipaje: 4 valijas + 4 equipaje de mano (aproximado, según dimensiones estándares).
     - Código: `MVL`
     - Descripción: Ideal para traslados con equipaje desde y hacia aeropuertos.
     - Modelos: Chevrolet Spin, Citroen Berlingo, Peugeot Partner, Renault Kangoo o similares.
 - Remís VIP:
   - Máximo pasajeros: 3.
-  - Máximo equipaje: 2 valijas + 2 equipaje de mano (aproximado, según dimenciones estándares).
+  - Máximo equipaje: 2 valijas + 2 equipaje de mano (aproximado, según dimensiones estándares).
   - Código: `VIP`
   - Descripción: Eventos especiales.
   - Modelos: Mercedes Benz clase "C", clase "E" y clase "E línea nueva".
