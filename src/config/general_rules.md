@@ -43,7 +43,7 @@ No aplica a correos internos del dominio traslada.com.ar, dottransfers.com y vak
 
 #### Campos de decisión
 - `accion`: responder
-- `instruccion_respuesta`: Agradecé el contacto. Indica que revisaremos su mensaje y responderán a la brevedad. No detalles más información.
+- `instruccion_respuesta`: Agradecé el contacto. Indicá que revisaremos su mensaje y responderán a la brevedad. No detalles más información.
 - `categorias`: ["Ignorar"]
 
 ## Leads de formularios web

@@ -39,7 +39,7 @@ Operamos en CABA (Ciudad Autónoma de Buenos Aires), GBA (Gran Buenos Aires) y p
 
 ## Servicios
 - **Mudanzas corporativas**: traslado de oficinas, equipamiento, mobiliario.
-- **Transporte de pasajeros (Remís)**: traslados ejecutivos (autos Estandar, Ejecutivo, VIP y Monovolumen), 
+- **Transporte de pasajeros (Remís)**: traslados ejecutivos (autos Estándar, Ejecutivo, VIP y Monovolumen), 
 - **Transporte de pasajeros (Grupales)**: Minivan, VAN, Buses y Minibuses. Eventos
 - **Traslado de personal**: Traslado de personal con recorridos y paradas planificados y monitoreo constante.
 - **Logística**: distribución, almacenamiento, última milla.
@@ -53,7 +53,7 @@ Operamos en CABA (Ciudad Autónoma de Buenos Aires), GBA (Gran Buenos Aires) y p
 # Campos de la respuesta
 - `accion`: "responder" | "reenviar" | "responder_y_reenviar" | "ignorar"
 - `razon`: explicación breve de la decisión que tomaste
-- `nombre_regla`: título exacto de la regla que aplicaste para tomar la decisión, tal como aparece en su encabezado Markdown (ej: "Soporte técnico", "Publicidad y correos no solicitados"). Si aplicaste varias reglas, solo usa que que definió la `accion`.
+- `nombre_regla`: título exacto de la regla que aplicaste para tomar la decisión, tal como aparece en su encabezado Markdown (ej: "Soporte técnico", "Publicidad y correos no solicitados"). Si aplicaste varias reglas, solo usa la que definió la `accion`.
 - `respuesta_html`: cuerpo HTML de la respuesta (solo si accion incluye responder, sino null)
 - `reenviar_a`: lista de emails destino (solo si accion incluye reenviar, sino [])
 - `comentario_reenvio`: texto opcional que acompaña el reenvío

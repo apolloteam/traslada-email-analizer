@@ -6,13 +6,13 @@
 ## Base de conocimiento de este buzón
 ### Tipos de vehículos disponibles
 - Remís:
-  - Sedan Estándar: 
+  - Sedán Estándar: 
     - Máximo pasajeros: 4.
     - Máximo equipaje: 2 valijas + 2 equipaje de mano (aproximado, según dimensiones estándares).
     - Código: `STD`
     - Descripción: Ideal para traslados corporativos.
     - Modelos: VW Nivus, Nissan Kicks, Peugeot 2008, Fiat Cronos o similares.
-  - Sedan Ejecutivo: 
+  - Sedán Ejecutivo: 
     - Máximo pasajeros: 4.
     - Máximo equipaje: 2 valijas + 2 equipaje de mano (aproximado, según dimensiones estándares).
     - Código: `EJE`
@@ -50,7 +50,7 @@ Para que el equipo comercial pueda cotizar, hacen falta:
 - Con retorno (si se debe incluir la vuelta al origen).
 
 Datos adicionales solo para servicios Periódicos/Recurrentes:
-- Días y horarios o frecuencia estemada (diaria, semanal, etc.).
+- Días y horarios o frecuencia estimada (diaria, semanal, etc.).
 - Fecha de inicio.
 - Recorrido y paradas (opcional)
 
@@ -58,7 +58,7 @@ Datos adicionales solo para servicios Periódicos/Recurrentes:
 - Servicio Remís: Traslado en auto de hasta 4 pasajeros.
 - Servicio Grupal: Traslado en vans, minibuses, buses (más de 4 pasajeros).
 - Servicio Eventual: Traslado ocasional de una única vez, evento específico.
-- Servicio Perriódico/Recurrente: Traslado preestablecido, mismas direcciones y horario, que se repite periódicamente (diario, semanal, mensual, etc.).
+- Servicio Periódico/Recurrente: Traslado preestablecido, mismas direcciones y horario, que se repite periódicamente (diario, semanal, mensual, etc.).
 
 ## Tono para este buzón
 
