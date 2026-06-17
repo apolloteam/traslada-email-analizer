@@ -19,6 +19,7 @@ Prompts
 ☐ Agregar en los .md específicos de Dot y Vak que es un segmento de Traslada llamado **VAK**/**DotTransfers**, etc... (en el system_prompt dice que es traslada).
 ☐ Si llega a SAC por objetos perdidos, que el agente ponga una nota diciendo: Recibimos el reclamo. Si necesita atención urgente comunicarse al 0800-...
 ☐ Pedir a Gaston (el de los forms) que incluya "Cantida de pasajeros", "Cantida de equipaje", "Con retorno".
+☐ Cuando se haga las reglas de RRHH, separar los de Choferes de los Enmpleados y Choferes-Enmpleados.
 
 Excluidos
 ☐ Plantilla de respuesta.
