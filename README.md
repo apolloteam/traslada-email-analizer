@@ -52,7 +52,25 @@ pip install -r requirements.txt
 python3 src/agent.py --interval 1
 ```
 
----
+### 5. Ejecutar/Controlar/Detener
+```bash
+# Ejecuta el agente (no se corta si se pierde conexión con SSH).
+nohup python src/agent.py --interval 1 > /dev/null 2>&1 &
+
+# Ver si anda.
+ps aux | grep agent.py
+ps aux | grep "[a]gent.py"
+
+# Ver log.
+tail -f src/logs/agent_20260618.log
+
+# Lo para pero espera a que termine el ciclo.
+ps aux | grep agent.py
+kill ???num_proceso????
+
+# Lo para y corta esté donde esté.
+kill -9
+```
 
 ## Correr el agente
 
