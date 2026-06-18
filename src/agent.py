@@ -11,6 +11,7 @@ import os
 import re
 import time
 import json
+import signal
 import logging
 import argparse
 from datetime import datetime, timezone
@@ -75,6 +76,17 @@ logging.getLogger().addHandler(_file_handler)
 logging.getLogger().addHandler(_stream_handler)
 
 log = logging.getLogger(__name__)
+
+# ── Apagado limpio ────────────────────────────────────────────────
+_apagar = False
+
+def _pedir_apagado(sig, frame):
+    global _apagar
+    _apagar = True
+    log.info("🛑 Apagado solicitado. Terminando el ciclo actual antes de salir...")
+
+signal.signal(signal.SIGTERM, _pedir_apagado)
+signal.signal(signal.SIGINT, _pedir_apagado)
 
 
 TZ_ARGENTINA = ZoneInfo("America/Argentina/Buenos_Aires")
@@ -190,6 +202,8 @@ def ciclo(mail_client: MailClient, analizador: AnalizadorClaude):
     log.info(f"  {len(correos)} correo(s) encontrado(s).")
 
     for correo in correos:
+        if _apagar:
+            break
         try:
             log.info(f"  📧 Procesando: '{correo['subject']}' de {correo['from']['emailAddress']['address']}")
 
@@ -343,12 +357,21 @@ def main():
         try:
             for buzon in buzones:
                 ciclo(MailClient(buzon), analizador)
+                if _apagar:
+                    break
 
         except Exception as e:
             log.error(f"Error en ciclo principal: {e}")
 
+        if _apagar:
+            log.info("✅ Apagado limpio.")
+            break
+
         log.info(f"  ⏳ Próxima revisión en {intervalo} minutos...")
-        time.sleep(intervalo * 60)
+        for _ in range(intervalo * 60):
+            if _apagar:
+                break
+            time.sleep(1)
 
 
 if __name__ == "__main__":
