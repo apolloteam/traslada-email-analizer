@@ -59,6 +59,7 @@ Datos adicionales solo para servicios Periódicos/Recurrentes:
 - Servicio Grupal: Traslado en vans, minibuses, buses (más de 4 pasajeros).
 - Servicio Eventual: Traslado ocasional de una única vez, evento específico.
 - Servicio Periódico/Recurrente: Traslado preestablecido, mismas direcciones y horario, que se repite periódicamente (diario, semanal, mensual, etc.).
+- Servicio de Charter: Traslado de personal (traslado con recorridos recurrentes de empleados de una empresa)
 
 ## Tono para este buzón
 
@@ -108,7 +109,7 @@ El correo pregunta por precios, cotizaciones o presupuestos de un traslado grupa
 
 #### Campos de decisión
 - `accion`: responder_y_reenviar
-- `reenviar_a`: vstaque@traslada.com.ar;jgomezmoreno@traslada.com.ar;rodrigosalinas@traslada.com.ar
+- `reenviar_a`: cmontivero@traslada.com.ar;jgomezmoreno@traslada.com.ar
 - `categorias`: ["Comercial", "B2C", "Grupal", "Lead"]
 - `instruccion_respuesta`:
   - Agradecé el interés (si no lo hiciste en un mensaje anterior del hilo).
@@ -130,7 +131,7 @@ El correo pregunta por precios, cotizaciones o presupuestos de un traslado de re
 
 #### Campos de decisión
 - `accion`: responder_y_reenviar
-- `reenviar_a`: mbfernandez@traslada.com.ar;rodrigosalinas@traslada.com.ar
+- `reenviar_a`: lmercado@traslada.com.ar;mbfernandez@traslada.com.ar
 - `categorias`: ["Comercial", "B2B", "Remis", "Lead"]
 - `instruccion_respuesta`:
   - Agradecé el interés (si no lo hiciste en un mensaje anterior del hilo).
@@ -152,7 +153,7 @@ El correo pregunta por precios, cotizaciones o presupuestos de un traslado grupa
 
 #### Campos de decisión
 - `accion`: responder_y_reenviar
-- `reenviar_a`: vstaque@traslada.com.ar;jgomezmoreno@traslada.com.ar;rodrigosalinas@traslada.com.ar
+- `reenviar_a`: cmontivero@traslada.com.ar;jgomezmoreno@traslada.com.ar
 - `categorias`: ["Comercial", "B2B", "Grupal", "Lead"]
 - `instruccion_respuesta`:
   - Agradecé el interés (si no lo hiciste en un mensaje anterior del hilo).
@@ -170,14 +171,14 @@ El correo pregunta por precios, cotizaciones o presupuestos de un traslado grupa
   - **Si faltan datos:** false
   - **Si están completos:** true
 
-### 📢 Regla - Consulta de servicio Recurrente **B2B**
+### 📢 Regla - Consulta de servicio Traslado de Personal **B2B**
 
 #### Condiciones
-El correo pregunta por precios, cotizaciones, presupuestos o contratación periódica de un traslado, y encaja en el perfil B2B. También aplica si el asunto contiene "Source: WebTrasladaCharters" (lead del formulario web de charters, que corresponde a traslado de personal grupal recurrente B2B).
+El correo pregunta por precios, cotizaciones, presupuestos o contratación periódica de un traslado de personal, y encaja en el perfil B2B. También aplica si el asunto contiene "Source: WebTrasladaCharters" (lead del formulario web de charters, que corresponde a traslado de personal grupal recurrente B2B).
 
 #### Campos de decisión
 - `accion`: responder_y_reenviar
-- `reenviar_a`: vstaque@traslada.com.ar;jgomezmoreno@traslada.com.ar;rodrigosalinas@traslada.com.ar
+- `reenviar_a`: vstaque@traslada.com.ar
 - `categorias`: ["Comercial", "B2B", "Charter", "Lead", "⭐ Prioritario"]
 - `instruccion_respuesta`:
   - Agradecé el interés (si no lo hiciste en un mensaje anterior del hilo).
@@ -202,7 +203,7 @@ Correo con pliego, concurso, licitación, RFQ/RFP, proceso de selección de prov
 
 #### Campos de decisión
 - `accion`: responder_y_reenviar
-- `reenviar_a`: vstaque@traslada.com.ar;jgomezmoreno@traslada.com.ar;rodrigosalinas@traslada.com.ar
+- `reenviar_a`: vstaque@traslada.com.ar;lmercado@traslada.com.ar;rodrigosalina@traslada.com.ar
 - `instruccion_respuesta`: Tono formal. Confirmar recepción de documentación. Indicar que equipo comercial fue notificado y trabajará en la propuesta. Si hay fecha límite, reconocerla. No comprometer condiciones.
 - `comentario_reenvio`: 🧾 FYA - Licitación. 🙋‍♂️ Analizar.
 - `categorias`: ["Comercial", "Licitación", "⭐ Prioritario"]
@@ -211,12 +212,12 @@ Correo con pliego, concurso, licitación, RFQ/RFP, proceso de selección de prov
 ### 📢🔀 Regla - Derivación a otra área
 
 #### Condiciones
-El correo no corresponde a una gestión comercial sino a otra área: reclamos, atención al cliente, soporte técnico, facturación, operaciones, gestión de choferes/prestadores.
+El correo no corresponde a una gestión comercial sino a otra área: reclamos, atención al cliente, soporte técnico, facturación, operaciones, gestión u alta de choferes/prestadores, recursos humanos.
 
 #### Ejemplos que aplican
 - "el chofer no llegó", "quiero cancelar mi reserva de mañana", "necesito cambiar el horario de un viaje ya agendado".
 - "necesito la factura del viaje del martes", "tengo un problema con un pago".
-- "soy chofer y no puedo acceder a la app".
+- "soy chofer y no puedo acceder a la app", "quiero trabajar de chofer".
 
 #### Ejemplos que NO aplican
 - Consultas de precio o presupuesto de un traslado nuevo (eso es Consulta comercial).
@@ -227,8 +228,9 @@ El correo no corresponde a una gestión comercial sino a otra área: reclamos, a
   - Soporte técnico / incidentes de sistema → reservas@traslada.com.ar
   - Facturación, pagos, comprobantes → administracion@traslada.com.ar
   - Operaciones / consultas post-reserva (estado, cambios, cancelaciones) → reservas@traslada.com.ar
-  - Gestión de choferes → flota@traslada.com.ar
+  - Gestión / alta de choferes → flota@traslada.com.ar
   - Atención al cliente / reclamos / objetos perdidos → sac@traslada.com.ar
+  - Búsqueda de trabajo → busquedas@traslada.com.ar
 - `comentario_reenvio`: 🔀 Correo recibido en Ventas que corresponde a esta área. Derivado para su gestión.
 - `categorias`: ["Derivado"]
 - `carpeta_archivo`: "Redirigidos"
@@ -240,7 +242,7 @@ El asunto contiene "Source: WebTrasladaContacto". Es un lead del formulario de c
 
 #### Campos de decisión
 - `accion`: responder_y_reenviar
-- `reenviar_a`: vstaque@traslada.com.ar;jgomezmoreno@traslada.com.ar
+- `reenviar_a`: lmercado@traslada.com.ar;jgomezmoreno@traslada.com.ar
 - `categorias`: ["Comercial", "Lead", "Web"]
 - `borrador`: true
 - `instruccion_respuesta`:
@@ -257,7 +259,7 @@ El asunto contiene "Source: WebClientesTraslada". Es una notificación informati
 
 #### Campos de decisión
 - `accion`: ignorar
-- `categorias`: ["Web", "Registro"]
+- `categorias`: ["Web", "RegistroApp"]
 
 ### 📢📁 Regla - Archivo de conversaciones finalizadas
 
