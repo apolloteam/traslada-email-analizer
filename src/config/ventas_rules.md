@@ -60,6 +60,11 @@ Datos adicionales solo para servicios Periódicos/Recurrentes:
 - Servicio Eventual: Traslado ocasional de una única vez, evento específico.
 - Servicio Periódico/Recurrente: Traslado preestablecido, mismas direcciones y horario, que se repite periódicamente (diario, semanal, mensual, etc.).
 - Servicio de Charter: Traslado de personal (traslado con recorridos recurrentes de empleados de una empresa)
+- Lead de formulario web: El correo proviene de un formulario de nuestra web, los datos estan estructurados y el subject comienza con "Nuevo lead - Source: ".
+
+### Lectura del bloque "Data:" en los leads de formularios web
+Los leads de formularios web pueden incluir, al final del cuerpo, un bloque "Data:" en formato JSON con los datos estructurados que completó el cliente (por ejemplo FechaServicio, Origen, Destino, Servicio, u otros según el formulario).
+Tratá este bloque como parte integral del correo y como la fuente más confiable de esos datos. Si un mismo dato aparece tanto en el cuerpo como en el JSON y hay diferencias, priorizá el valor del JSON. Si un campo del JSON viene vacío o ausente, consideralo un dato faltante.
 
 ## Tono para este buzón
 
