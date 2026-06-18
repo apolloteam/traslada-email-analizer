@@ -42,10 +42,14 @@ cp .env.example .env
 ### 4. Actualizar repo (pull)
 
 ```bash
+# Server Linux
 cd home/ubuntu/projects/traslada-email-analizer/
 eval "$(ssh-agent -s)"
 ssh-add ~/.ssh/claudito-sshkey
 git pull
+source .venv/bin/activate
+pip install -r requirements.txt
+python3 src/agent.py --interval 1
 ```
 
 ---
