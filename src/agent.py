@@ -29,14 +29,51 @@ import db_logger
 _LOG_DIR = os.path.join(_DIR, "logs")
 os.makedirs(_LOG_DIR, exist_ok=True)
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s",
-    handlers=[
-        logging.FileHandler(os.path.join(_DIR, "logs", "agent.log"), encoding="utf-8"),
-        logging.StreamHandler()
-    ]
-)
+class _DailyFileHandler(logging.Handler):
+    """Escribe en agent_YYYYMMDD.log del día actual; cambia de archivo al medianoche."""
+
+    def __init__(self, log_dir: str, encoding: str = "utf-8") -> None:
+        super().__init__()
+        self._log_dir = log_dir
+        self._encoding = encoding
+        self._current_date: str = ""
+        self._stream = None
+        self._abrir_hoy()
+
+    def _abrir_hoy(self) -> None:
+        if self._stream:
+            self._stream.close()
+        self._current_date = datetime.now().strftime("%Y%m%d")
+        path = os.path.join(self._log_dir, f"agent_{self._current_date}.log")
+        self._stream = open(path, "a", encoding=self._encoding)
+
+    def emit(self, record: logging.LogRecord) -> None:
+        if datetime.now().strftime("%Y%m%d") != self._current_date:
+            self._abrir_hoy()
+        try:
+            self._stream.write(self.format(record) + "\n")
+            self._stream.flush()
+        except Exception:
+            self.handleError(record)
+
+    def close(self) -> None:
+        if self._stream:
+            self._stream.close()
+        super().close()
+
+
+_log_fmt = logging.Formatter("%(asctime)s [%(levelname)s] %(message)s")
+
+_file_handler = _DailyFileHandler(_LOG_DIR)
+_file_handler.setFormatter(_log_fmt)
+
+_stream_handler = logging.StreamHandler()
+_stream_handler.setFormatter(_log_fmt)
+
+logging.getLogger().setLevel(logging.INFO)
+logging.getLogger().addHandler(_file_handler)
+logging.getLogger().addHandler(_stream_handler)
+
 log = logging.getLogger(__name__)
 
 

@@ -30,9 +30,9 @@ python src/agent.py --once                         # una sola ejecución (útil 
 python src/agent.py --interval 5                   # loop cada 5 minutos
 ```
 
-Logs en `src/logs/agent.log`. Para seguir en tiempo real:
+Logs en `src/logs/agent_YYYYMMDD.log` (un archivo por día; al pasar la medianoche abre el del día siguiente). Para seguir en tiempo real:
 ```powershell
-Get-Content src\logs\agent.log -Wait
+Get-Content src\logs\agent_20260618.log -Wait   # ajustar la fecha al día actual
 ```
 
 ## Architecture
