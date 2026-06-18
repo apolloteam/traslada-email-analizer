@@ -83,7 +83,7 @@ _apagar = False
 def _pedir_apagado(sig, frame):
     global _apagar
     _apagar = True
-    log.info("🛑 Apagado solicitado. Terminando el ciclo actual antes de salir...")
+    log.info("  🛑 Apagado solicitado. Terminando el ciclo actual antes de salir...")
 
 signal.signal(signal.SIGTERM, _pedir_apagado)
 signal.signal(signal.SIGINT, _pedir_apagado)
@@ -364,7 +364,7 @@ def main():
             log.error(f"Error en ciclo principal: {e}")
 
         if _apagar:
-            log.info("✅ Apagado limpio.")
+            log.info("  ✅ Apagado limpio.")
             break
 
         log.info(f"  ⏳ Próxima revisión en {intervalo} minutos...")
