@@ -187,6 +187,49 @@ class MailClient:
         }
         self._request_con_retry("POST", url, json=payload)
 
+    _ADJUNTO_MAX_BYTES = 3_145_728  # 3 MB: límite práctico para sendMail inline
+
+    def _obtener_adjuntos_para_envio(self, correo_id: str) -> list[dict]:
+        """
+        Descarga los adjuntos de un correo y devuelve los que son aptos para sendMail.
+        Omite adjuntos > 3 MB y los que no son fileAttachment. Nunca lanza excepciones.
+        """
+        try:
+            url = f"{GRAPH}/users/{self.buzon}/messages/{correo_id}/attachments"
+            r = self._request_con_retry("GET", url)
+            adjuntos = []
+            for adj in r.json().get("value", []):
+                tipo = adj.get("@odata.type", "")
+                nombre = adj.get("name", "")
+                size = adj.get("size", 0)
+
+                if tipo != "#microsoft.graph.fileAttachment":
+                    log.warning(f"    ⚠️ Adjunto '{nombre}' omitido (tipo no soportado: {tipo})")
+                    continue
+
+                if size > self._ADJUNTO_MAX_BYTES:
+                    log.warning(f"    ⚠️ Adjunto '{nombre}' omitido por tamaño ({size} bytes)")
+                    continue
+
+                entrada = {
+                    "@odata.type": "#microsoft.graph.fileAttachment",
+                    "name": nombre,
+                    "contentType": adj.get("contentType"),
+                    "contentBytes": adj.get("contentBytes"),
+                    "isInline": adj.get("isInline", False),
+                }
+                if adj.get("contentId"):
+                    entrada["contentId"] = adj["contentId"]
+
+                adjuntos.append(entrada)
+
+            return adjuntos
+
+        except Exception as e:
+            log.error(f"    ❌ Error obteniendo adjuntos de {correo_id}: {e}")
+            adjuntos = []
+            return adjuntos
+
     def derivar(self, correo: dict, destinatarios: list[str], reply_to_address: str, comentario: str = "") -> None:
         """
         Deriva el correo a buzones internos via sendMail, seteando replyTo=cliente original.
@@ -214,6 +257,10 @@ class MailClient:
             f"<div>{cuerpo_orig}</div>"
         )
 
+        adjuntos = []
+        if correo.get("hasAttachments"):
+            adjuntos = self._obtener_adjuntos_para_envio(correo["id"])
+
         to_list = [{"emailAddress": {"address": e}} for e in destinatarios]
         url = f"{GRAPH}/users/{self.buzon}/sendMail"
         payload = {
@@ -225,6 +272,9 @@ class MailClient:
             },
             "saveToSentItems": True,
         }
+        if adjuntos:
+            payload["message"]["attachments"] = adjuntos
+
         self._request_con_retry("POST", url, json=payload)
 
     def enviar_nuevo(self, destinatario: str, asunto: str, cuerpo_html: str) -> None:
