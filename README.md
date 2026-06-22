@@ -43,31 +43,39 @@ cp .env.example .env
 
 ```bash
 # Server Linux
+# 1 Detener (si estaba andando).
+ps aux | grep "[a]gent.py" # Para ver el ID del proceso.
+kill ???num_proceso????
+
+# 2 Actualizar repo.
 cd home/ubuntu/projects/traslada-email-analizer/
 eval "$(ssh-agent -s)"
 ssh-add ~/.ssh/claudito-sshkey
 git pull
+
+# 3 Instalar librerías.
 source .venv/bin/activate
 pip install -r requirements.txt
-python3 src/agent.py --interval 1
+
+# Ejecuta el agente (no se corta si se pierde conexión con SSH).
+## (obsoleto) python3 src/agent.py --interval 1
+nohup python src/agent.py --interval 1 > /dev/null 2>&1 &
 ```
 
 ### 5. Ejecutar/Controlar/Detener
 ```bash
 # Ejecuta el agente (no se corta si se pierde conexión con SSH).
-source .venv/bin/activate # Activar el entorno virtual primero!
-nohup python3 src/agent.py --interval 1 > /dev/null 2>&1 &
+nohup python src/agent.py --interval 1 > /dev/null 2>&1 &
 
 # Ver si anda.
 ps aux | grep agent.py
 ps aux | grep "[a]gent.py"
-# NOTA: Si da: **[1]+  Exit 1** es que no anda, en ese caso ejecutarlo con: **python3 src/agent.py --interval 1** para ver el error en consola.
 
 # Ver log.
 tail -f src/logs/agent_20260618.log
 
 # Lo para pero espera a que termine el ciclo.
-ps aux | grep agent.py
+ps aux | grep "[a]gent.py"
 kill ???num_proceso????
 
 # Lo para y corta esté donde esté.
@@ -161,8 +169,3 @@ Cada X minutos:
   3. Esperar hasta el próximo ciclo
 ```
 
----
-
-## Agregar nuevas reglas
-
-Solo editás `config/rules.json` — no hace falta tocar código. El agente levanta las reglas en cada ciclo, así que los cambios aplican de inmediato sin reiniciar.
