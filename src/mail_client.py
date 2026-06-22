@@ -300,6 +300,33 @@ class MailClient:
         payload = {"categories": todas}
         self._request_con_retry("PATCH", url, json=payload)
 
+    def quitar_categoria_de_hilo(self, conversation_id: str, categoria: str) -> int:
+        """
+        Quita la categoría indicada de todos los correos del hilo (mismo conversationId).
+        Devuelve la cantidad de correos a los que se les quitó. Nunca lanza excepción.
+        """
+        quitados = 0
+        try:
+            url = f"{GRAPH}/users/{self.buzon}/messages"
+            params = {
+                "$filter": f"conversationId eq '{conversation_id}'",
+                "$select": "id,categories",
+            }
+            r = self._request_con_retry("GET", url, params=params)
+            mensajes = r.json().get("value", [])
+            for msg in mensajes:
+                cats = msg.get("categories", [])
+                if categoria not in cats:
+                    continue
+                nueva_lista = [c for c in cats if c != categoria]
+                url_msg = f"{GRAPH}/users/{self.buzon}/messages/{msg['id']}"
+                self._request_con_retry("PATCH", url_msg, json={"categories": nueva_lista})
+                quitados += 1
+            log.info(f"🧹 Categoría '{categoria}' quitada de {quitados} correo(s) del hilo")
+        except Exception as exc:
+            log.error(f"❌ Error quitando categoría '{categoria}' del hilo {conversation_id}: {exc}")
+        return quitados
+
     def marcar_leido(self, message_id: str) -> None:
         url = f"{GRAPH}/users/{self.buzon}/messages/{message_id}"
         self._request_con_retry("PATCH", url, json={"isRead": True})

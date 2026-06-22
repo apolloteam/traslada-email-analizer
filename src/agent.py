@@ -95,6 +95,9 @@ TZ_ARGENTINA = ZoneInfo("America/Argentina/Buenos_Aires")
 REMITENTE_LEAD  = os.getenv("REMITENTE_LEAD", "noreply@traslada.com.ar") # Ejemplo: noreply@traslada.com.ar
 LEAD_ASUNTO_PATRON = "nuevo lead - source:"
 
+CATEGORIA_DATOS_COMPLETOS = "DatosCompletos"
+CATEGORIA_DATOS_FALTANTES = "SolicitudDatosFaltantes"
+
 
 def extraer_email_de_lead(body_texto: str) -> str | None:
     """
@@ -280,6 +283,9 @@ def ciclo(mail_client: MailClient, analizador: AnalizadorClaude):
                 # reprocesa en el próximo ciclo (evita responder/reenviar dos veces).
                 # La categoría 'AgenteProcesado' viaja con el correo aunque luego se mueva.
                 mail_client.marcar_procesado(correo["id"], decision.get("categorias", []))
+
+                if CATEGORIA_DATOS_COMPLETOS in decision.get("categorias", []) and correo.get("conversationId"):
+                    mail_client.quitar_categoria_de_hilo(correo["conversationId"], CATEGORIA_DATOS_FALTANTES)
 
                 # 3. Ejecutar acción + escalar + mover, de forma protegida.
                 # Si algo falla acá, el correo ya está marcado (no se duplica) y se mueve
