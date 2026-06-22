@@ -113,21 +113,25 @@ En caso que ya le hayas indicado que utilice los canales para B2C y haya solicit
 El correo pregunta por precios, cotizaciones o presupuestos de un traslado grupal, y encaja en el perfil B2C. También aplica si el asunto contiene "Source: WebTrasladaPresupuesto" y el lead es de un particular (perfil B2C) para un traslado grupal.
 
 #### Campos de decisión
-- `accion`: responder_y_reenviar
-- `reenviar_a`: cmontivero@traslada.com.ar;jgomezmoreno@traslada.com.ar
-- `categorias`: ["B2C", "Grupal", "Lead"]
-- `instruccion_respuesta`:
-  - Agradecé el interés (si no lo hiciste en un mensaje anterior del hilo).
-  - **Según si están los datos mínimos requeridos** (ver la base de conocimiento del buzón):
-    - **Si faltan datos:** solicitá amablemente los datos faltantes e indicá que son requeridos para poder asesorarlo. Informá que, una vez que tengamos todos los datos, un asesor comercial se contactará con una propuesta personalizada.
-    - **Si están todos los datos:** informá que un asesor comercial se contactará en breve con la propuesta. Si detectás que en el hilo se los habías pedido antes, agradecé que los haya enviado.
-  - Incluí el nombre del solicitante si figura en el correo.
-- `comentario_reenvio`:
-  - **Si faltan datos:** 🚌 FYI - Oportunidad de servicio GRUPAL B2C entrante. Se le pidieron datos faltantes - 👀 Controlar.
-  - **Si están completos:** 🚌 FYA - Oportunidad de servicio GRUPAL B2C. 🙋‍♂️ Contactar al cliente.
-- `borrador`:
-  - **Si faltan datos:** false
-  - **Si están completos:** true
+- **Según si están los datos mínimos requeridos** (ver la base de conocimiento del buzón):
+  - **Si faltan datos:**
+    - `accion`: responder
+    - `categorias`: ["B2C", "Grupal", "Lead", "SolicitudDatosFaltantes"]
+    - `instruccion_respuesta`:
+      - Agradecé el interés (si no lo hiciste en un mensaje anterior del hilo).
+      - Solicitá amablemente los datos faltantes e indicá que son requeridos para poder asesorarlo. Informá que, una vez que tengamos todos los datos, un asesor comercial se contactará con una propuesta personalizada.
+      - Incluí el nombre del solicitante si figura en el correo.
+    - `borrador`: false
+  - **Si están todos los datos:**
+    - `accion`: responder_y_reenviar
+    - `reenviar_a`: cmontivero@traslada.com.ar;jgomezmoreno@traslada.com.ar
+    - `categorias`: ["B2C", "Grupal", "Lead", "DatosCompletos"]
+    - `instruccion_respuesta`:
+      - Agradecé el interés (si no lo hiciste en un mensaje anterior del hilo).
+      - Informá que un asesor comercial se contactará en breve con la propuesta. Si detectás que en el hilo se los habías pedido antes, agradecé que los haya enviado.
+      - Incluí el nombre del solicitante si figura en el correo.
+    - `comentario_reenvio`: 🚌 FYA - Oportunidad de servicio GRUPAL B2C. 🙋‍♂️ Contactar al cliente.
+    - `borrador`: true
 
 ### 📢 Regla - Consulta de servicio de remís **B2B**
 
