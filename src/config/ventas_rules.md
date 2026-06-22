@@ -133,27 +133,31 @@ El correo pregunta por precios, cotizaciones o presupuestos de un traslado grupa
     - `comentario_reenvio`: 🚌 FYA - Oportunidad de servicio GRUPAL B2C. 🙋‍♂️ Contactar al cliente.
     - `borrador`: true
 
-### 📢 Regla - Consulta de servicio de remís **B2B**
+### 📢 Regla - Consulta de servicio de Remís **B2B**
 
 #### Condiciones
 El correo pregunta por precios, cotizaciones o presupuestos de un traslado de remís, y encaja en el perfil B2B. También aplica si el asunto contiene "Source: WebTrasladaPresupuesto" y el lead es de una empresa (perfil B2B) para un servicio de remís.
 
 #### Campos de decisión
-- `accion`: responder_y_reenviar
-- `reenviar_a`: lmercado@traslada.com.ar;mbfernandez@traslada.com.ar
-- `categorias`: ["B2B", "Remis", "Lead"]
-- `instruccion_respuesta`:
-  - Agradecé el interés (si no lo hiciste en un mensaje anterior del hilo).
-  - **Según si están los datos mínimos requeridos** (ver la base de conocimiento del buzón):
-    - **Si faltan datos:** solicitá amablemente los datos faltantes e indicá que son requeridos para poder asesorarlo. Informá que, una vez que tengamos todos los datos, un asesor comercial se contactará con una propuesta personalizada.
-    - **Si están todos los datos:** informá que un asesor comercial se contactará en breve con la propuesta. Si detectás que en el hilo se los habías pedido antes, agradecé que los haya enviado.
-  - Incluí el nombre de la persona y de la empresa si figuran en el correo.
-- `comentario_reenvio`:
-  - **Si faltan datos:** 💼 FYI - Oportunidad de servicio REMIS B2B. Se le pidieron datos faltantes - 👀 Controlar.
-  - **Si están completos:** 💼 FYA - Oportunidad de servicio REMIS B2B. 🙋‍♂️ Contactar al cliente.
-- `borrador`:
-  - **Si faltan datos:** false
-  - **Si están completos:** true
+- **Según si están los datos mínimos requeridos** (ver la base de conocimiento del buzón):
+  - **Si faltan datos:**
+    - `accion`: responder
+    - `categorias`: ["B2B", "Remis", "Lead", "SolicitudDatosFaltantes"]
+    - `instruccion_respuesta`:
+      - Agradecé el interés (si no lo hiciste en un mensaje anterior del hilo).
+      - Solicitá amablemente los datos faltantes e indicá que son requeridos para poder asesorarlo. Informá que, una vez que tengamos todos los datos, un asesor comercial se contactará con una propuesta personalizada.
+      - Incluí el nombre de la persona y de la empresa si figuran en el correo.
+    - `borrador`: false
+  - **Si están todos los datos:**
+    - `accion`: responder_y_reenviar
+    - `reenviar_a`: lmercado@traslada.com.ar;mbfernandez@traslada.com.ar
+    - `categorias`: ["B2B", "Remis", "Lead", "DatosCompletos"]
+    - `instruccion_respuesta`:
+      - Agradecé el interés (si no lo hiciste en un mensaje anterior del hilo).
+      - Informá que un asesor comercial se contactará en breve con la propuesta. Si detectás que en el hilo se los habías pedido antes, agradecé que los haya enviado.
+      - Incluí el nombre de la persona y de la empresa si figuran en el correo.
+    - `comentario_reenvio`: 💼 FYA - Oportunidad de servicio REMIS B2B. 🙋‍♂️ Contactar al cliente.
+    - `borrador`: true
 
 ### 📢 Regla - Consulta de servicio Grupal Eventual **B2B**
 
@@ -161,24 +165,26 @@ El correo pregunta por precios, cotizaciones o presupuestos de un traslado de re
 El correo pregunta por precios, cotizaciones o presupuestos de un traslado grupal para una fecha o evento específico (Eventual), y encaja en el perfil B2B. También aplica si el asunto contiene "Source: WebTrasladaPresupuesto" y el lead es de una empresa (perfil B2B) para un traslado grupal puntual/eventual.
 
 #### Campos de decisión
-- `accion`: responder_y_reenviar
-- `reenviar_a`: cmontivero@traslada.com.ar;jgomezmoreno@traslada.com.ar
-- `categorias`: ["B2B", "Grupal", "Lead"]
-- `instruccion_respuesta`:
-  - Agradecé el interés (si no lo hiciste en un mensaje anterior del hilo).
-  - **Según si están los datos mínimos requeridos** (ver la base de conocimiento del buzón):
-    - **Si faltan datos:** informá que, una vez que tengamos todos los datos, un asesor comercial se contactará con una propuesta personalizada. Pedí amablemente los datos que faltan.
-    - **Si están todos los datos:** informá que un asesor comercial se contactará en breve con la propuesta. Si detectás que en el hilo se los habías pedido antes, agradecé que los haya enviado.
-  - Incluí el nombre del solicitante y de la empresa si figuran en el correo.
-- `comentario_reenvio`:
-  - **Si faltan datos:** 🚌 FYI - Oportunidad de servicio GRUPAL Eventual B2B entrante. Se le pidieron datos faltantes - 👀 Controlar.
-  - **Si están completos:** 🚌 FYA - Oportunidad de servicio GRUPAL Eventual B2B. 🙋‍♂️ Contactar al cliente.
-- `carpeta_archivo`:
-  - **Si faltan datos:** "Comercial/Analizado"
-  - **Si están completos:** null
-- `borrador`:
-  - **Si faltan datos:** false
-  - **Si están completos:** true
+- **Según si están los datos mínimos requeridos** (ver la base de conocimiento del buzón):
+  - **Si faltan datos:**
+    - `accion`: responder
+    - `categorias`: ["B2B", "Grupal", "Lead", "SolicitudDatosFaltantes"]
+    - `instruccion_respuesta`:
+      - Agradecé el interés (si no lo hiciste en un mensaje anterior del hilo).
+      - Solicitá amablemente los datos faltantes e indicá que son requeridos para poder asesorarlo. Informá que, una vez que tengamos todos los datos, un asesor comercial se contactará con una propuesta personalizada.
+      - Incluí el nombre del solicitante y de la empresa si figuran en el correo.
+    - `borrador`: false
+  - **Si están todos los datos:**
+    - `accion`: responder_y_reenviar
+    - `reenviar_a`: cmontivero@traslada.com.ar;jgomezmoreno@traslada.com.ar
+    - `categorias`: ["B2B", "Grupal", "Lead", "DatosCompletos"]
+    - `instruccion_respuesta`:
+      - Agradecé el interés (si no lo hiciste en un mensaje anterior del hilo).
+      - Informá que un asesor comercial se contactará en breve con la propuesta. Si detectás que en el hilo se los habías pedido antes, agradecé que los haya enviado.
+      - Incluí el nombre del solicitante y de la empresa si figuran en el correo.
+    - `comentario_reenvio`: 🚌 FYA - Oportunidad de servicio GRUPAL Eventual B2B. 🙋‍♂️ Contactar al cliente.
+    - `carpeta_archivo`: "Comercial/Analizado"
+    - `borrador`: true
 
 ### 📢 Regla - Consulta de servicio Traslado de Personal **B2B**
 
@@ -186,24 +192,26 @@ El correo pregunta por precios, cotizaciones o presupuestos de un traslado grupa
 El correo pregunta por precios, cotizaciones, presupuestos o contratación periódica de un traslado de personal, y encaja en el perfil B2B. También aplica si el asunto contiene "Source: WebTrasladaCharters" (lead del formulario web de charters, que corresponde a traslado de personal grupal recurrente B2B).
 
 #### Campos de decisión
-- `accion`: responder_y_reenviar
-- `reenviar_a`: vstaque@traslada.com.ar
-- `categorias`: ["B2B", "Charter", "Lead", "⭐ Prioritario"]
-- `instruccion_respuesta`:
-  - Agradecé el interés (si no lo hiciste en un mensaje anterior del hilo).
-  - **Según si están los datos mínimos requeridos** (ver la base de conocimiento del buzón):
-    - **Si faltan datos:** informá que, una vez que tengamos todos los datos, un asesor comercial se contactará con una propuesta personalizada. Pedí amablemente los datos que faltan.
-    - **Si están todos los datos:** informá que un asesor comercial se contactará en breve con la propuesta. Si detectás que en el hilo se los habías pedido antes, agradecé que los haya enviado.
-  - Incluí el nombre del solicitante y de la empresa si figuran en el correo.
-- `comentario_reenvio`:
-  - **Si faltan datos:** 📅 FYI - Oportunidad de contrato B2B entrante. Se le pidieron datos faltantes - 👀 Controlar.
-  - **Si están completos:** 📅 FYA - Oportunidad de contrato B2B. 🙋‍♂️ Contactar al cliente.
-- `carpeta_archivo`:
-  - **Si faltan datos:** "Comercial/Analizado"
-  - **Si están completos:** null
-- `borrador`:
-  - **Si faltan datos:** false
-  - **Si están completos:** true
+- **Según si están los datos mínimos requeridos** (ver la base de conocimiento del buzón):
+  - **Si faltan datos:**
+    - `accion`: responder
+    - `categorias`: ["B2B", "Charter", "Lead", "⭐ Prioritario", "SolicitudDatosFaltantes"]
+    - `instruccion_respuesta`:
+      - Agradecé el interés (si no lo hiciste en un mensaje anterior del hilo).
+      - Solicitá amablemente los datos faltantes e indicá que son requeridos para poder asesorarlo. Informá que, una vez que tengamos todos los datos, un asesor comercial se contactará con una propuesta personalizada.
+      - Incluí el nombre del solicitante y de la empresa si figuran en el correo.
+    - `borrador`: false
+  - **Si están todos los datos:**
+    - `accion`: responder_y_reenviar
+    - `reenviar_a`: vstaque@traslada.com.ar
+    - `categorias`: ["B2B", "Charter", "Lead", "⭐ Prioritario", "DatosCompletos"]
+    - `instruccion_respuesta`:
+      - Agradecé el interés (si no lo hiciste en un mensaje anterior del hilo).
+      - Informá que un asesor comercial se contactará en breve con la propuesta. Si detectás que en el hilo se los habías pedido antes, agradecé que los haya enviado.
+      - Incluí el nombre del solicitante y de la empresa si figuran en el correo.
+    - `comentario_reenvio`: 📅 FYA - Oportunidad de contrato B2B. 🙋‍♂️ Contactar al cliente.
+    - `carpeta_archivo`: "Comercial/Analizado"
+    - `borrador`: true
 
 ### 📢 Regla - Licitación o concurso de precios
 
