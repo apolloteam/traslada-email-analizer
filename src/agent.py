@@ -235,7 +235,8 @@ def ciclo(mail_client: MailClient, analizador: AnalizadorClaude):
 
             # Si es un lead de formulario web, extraemos el email del body y lo seteamos como replyTo.
             if es_lead_form:
-                email_cliente = extraer_email_de_lead(extraer_texto_body(correo))
+                texto_formulario = extraer_texto_body(correo)
+                email_cliente = extraer_email_de_lead(texto_formulario)
                 if email_cliente:
                     correo["replyTo"] = [{"emailAddress": {"address": email_cliente}}]
                     log.info(f"  📨 Lead de formulario web. Cliente: {email_cliente}")
@@ -291,18 +292,28 @@ def ciclo(mail_client: MailClient, analizador: AnalizadorClaude):
                 # Si algo falla acá, el correo ya está marcado (no se duplica) y se mueve
                 # a una carpeta de revisión para que nada se pierda en silencio.
                 try:
-                    # 3a. Ejecutar la acción decidida
+                    # 3a. Appendear datos del formulario para que viajen en la cadena citada.
+                    if es_lead_form and decision.get("respuesta_html"):
+                        bloque_formulario = (
+                            "<hr>"
+                            "<p><strong>━━ Datos del formulario ━━</strong></p>"
+                            f"<pre>{texto_formulario}</pre>"
+                            "<hr>"
+                        )
+                        decision["respuesta_html"] = decision["respuesta_html"] + bloque_formulario
+
+                    # 3b. Ejecutar la acción decidida
                     if decision["accion"] != "ignorar":
                         ejecutar_accion(decision, correo, mail_client)
 
-                    # 3b. Escalar si se detectaron red flags (independiente de la acción)
+                    # 3c. Escalar si se detectaron red flags (independiente de la acción)
                     escalar_a = decision.get("escalar_a", [])
                     if escalar_a:
                         red_flags = decision.get("red_flags_detectados", [])
                         mail_client.enviar_alerta_escalacion(correo, red_flags, escalar_a)
                         log.warning(f"    🚨 Red flags: {red_flags} → Escalado a: {escalar_a}")
 
-                    # 3c. Mover a carpeta de archivo si la conversación está cerrada
+                    # 3d. Mover a carpeta de archivo si la conversación está cerrada
                     carpeta = decision.get("carpeta_archivo")
                     if carpeta:
                         correo["id"] = mail_client.mover_a_carpeta(correo["id"], carpeta)  # ← actualiza el id
