@@ -226,6 +226,34 @@ Correo con pliego, concurso, licitación, RFQ/RFP, proceso de selección de prov
 - `categorias`: ["Licitación", "⭐ Prioritario"]
 - `borrador`: true
 
+### 📢 Regla - Gestión de cuenta corporativa **B2B**
+
+#### Condiciones
+El correo es de una empresa con cuenta corporativa existente y pide una gestión administrativa sobre esa cuenta: habilitaciones o autorizaciones de usuarios/pasajeros, altas o bajas de personas autorizadas a solicitar servicios, cambios de datos de la cuenta, o permisos para acceder a destinos/terminales específicos.
+
+#### Ejemplos que aplican
+- "me dijeron que no estoy habilitado para pedir servicio, necesito que autoricen mi usuario".
+- "de parte de [empresa] necesito gestionar la autorización para ir a [destino]".
+- "den de alta a este empleado para que pueda solicitar traslados".
+- "necesito habilitar a una persona en nuestra cuenta corporativa".
+
+#### No aplica si
+- El correo pide precios, cotizaciones o presupuestos de un traslado → es una consulta comercial (usá la regla comercial que corresponda).
+- Es un problema técnico del sistema/app (errores, no carga, etc.) → es soporte técnico.
+- Es una consulta operativa de un servicio puntual ya reservado (estado de un viaje, cambio de horario de un traslado agendado) → es operaciones.
+
+#### Campos de decisión
+- `accion`: responder_y_reenviar
+- `reenviar_a`: <completar con el mail interno de ventas/cuentas>
+- `categorias`: ["B2B", "Cuenta Corporativa", "Gestión"]
+- `instruccion_respuesta`:
+  - Tratá al cliente por su nombre si figura en el correo.
+  - Agradecé el contacto y confirmá que recibimos su solicitud de gestión de cuenta.
+  - Informá que derivamos el pedido al área que gestiona las cuentas corporativas y que se contactarán a la brevedad para resolverlo.
+  - No confirmes ni rechaces la autorización vos mismo (no tenés esa potestad), ni des plazos específicos salvo los que la empresa defina.
+- `comentario_reenvio`: 🏢 Gestión de cuenta corporativa B2B. Requiere autorización/habilitación. 👀 Revisar.
+- `borrador`: true
+
 ### 📢🔀 Regla - Derivación a otra área
 
 #### Condiciones
