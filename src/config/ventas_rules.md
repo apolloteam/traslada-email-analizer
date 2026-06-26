@@ -244,7 +244,7 @@ El correo es de una empresa con cuenta corporativa existente y pide una gestión
 
 #### Campos de decisión
 - `accion`: responder_y_reenviar
-- `reenviar_a`: <completar con el mail interno de ventas/cuentas>
+- `reenviar_a`: lmercado@traslada.com.ar
 - `categorias`: ["B2B", "Cuenta Corporativa", "Gestión"]
 - `instruccion_respuesta`:
   - Tratá al cliente por su nombre si figura en el correo.
@@ -253,32 +253,6 @@ El correo es de una empresa con cuenta corporativa existente y pide una gestión
   - No confirmes ni rechaces la autorización vos mismo (no tenés esa potestad), ni des plazos específicos salvo los que la empresa defina.
 - `comentario_reenvio`: 🏢 Gestión de cuenta corporativa B2B. Requiere autorización/habilitación. 👀 Revisar.
 - `borrador`: true
-
-### 📢🔀 Regla - Derivación a otra área
-
-#### Condiciones
-El correo no corresponde a una gestión comercial sino a otra área: reclamos, atención al cliente, soporte técnico, facturación, operaciones, gestión u alta de choferes/prestadores, recursos humanos.
-
-#### Ejemplos que aplican
-- "el chofer no llegó", "quiero cancelar mi reserva de mañana", "necesito cambiar el horario de un viaje ya agendado".
-- "necesito la factura del viaje del martes", "tengo un problema con un pago".
-- "soy chofer y no puedo acceder a la app", "quiero trabajar de chofer".
-
-#### Ejemplos que NO aplican
-- Consultas de precio o presupuesto de un traslado nuevo (eso es Consulta comercial).
-
-#### Campos de decisión
-- `accion`: reenviar
-- `reenviar_a`: según el área que corresponda, elegí UN destino de esta tabla:
-  - Soporte técnico / incidentes de sistema → reservas@traslada.com.ar
-  - Facturación, pagos, comprobantes → administracion@traslada.com.ar
-  - Operaciones / consultas post-reserva (estado, cambios, cancelaciones) → reservas@traslada.com.ar
-  - Gestión / alta de choferes → flota@traslada.com.ar
-  - Atención al cliente / reclamos / objetos perdidos → sac@traslada.com.ar
-  - Búsqueda de trabajo → busquedas@traslada.com.ar
-- `comentario_reenvio`: 🔀 Correo recibido en Ventas que corresponde a esta área. Derivado para su gestión.
-- `categorias`: ["Derivado"]
-- `carpeta_archivo`: "Redirigidos"
 
 ### 📢 Regla - Lead de formulario de Contacto
 
@@ -305,6 +279,32 @@ El asunto contiene "Source: WebClientesTraslada". Es una notificación informati
 #### Campos de decisión
 - `accion`: ignorar
 - `categorias`: ["Web", "RegistroApp"]
+
+### 📢🔀 Regla - Derivación a otra área
+
+#### Condiciones
+El correo no corresponde a una gestión comercial sino a otra área: reclamos, atención al cliente, soporte técnico, facturación, operaciones, gestión u alta de choferes/prestadores, recursos humanos.
+
+#### Ejemplos que aplican
+- "el chofer no llegó", "quiero cancelar mi reserva de mañana", "necesito cambiar el horario de un viaje ya agendado".
+- "necesito la factura del viaje del martes", "tengo un problema con un pago".
+- "soy chofer y no puedo acceder a la app", "quiero trabajar de chofer".
+
+#### Ejemplos que NO aplican
+- Consultas de precio o presupuesto de un traslado nuevo (eso es Consulta comercial).
+
+#### Campos de decisión
+- `accion`: reenviar
+- `reenviar_a`: según el área que corresponda, elegí UN destino de esta tabla:
+  - Soporte técnico / incidentes de sistema → reservas@traslada.com.ar
+  - Facturación, pagos, comprobantes → administracion@traslada.com.ar
+  - Operaciones / consultas post-reserva (estado, cambios, cancelaciones) → reservas@traslada.com.ar
+  - Gestión / alta de choferes → flota@traslada.com.ar
+  - Atención al cliente / reclamos / objetos perdidos → sac@traslada.com.ar
+  - Búsqueda de trabajo → busquedas@traslada.com.ar
+- `comentario_reenvio`: 🔀 Correo recibido en Ventas que corresponde a esta área. Derivado para su gestión.
+- `categorias`: ["Derivado"]
+- `carpeta_archivo`: "Redirigidos"
 
 ### 📢📁 Regla - Archivo de conversaciones finalizadas
 

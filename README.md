@@ -43,19 +43,19 @@ cp .env.example .env
 
 ```bash
 # Server Linux
-# 1 Detener (si estaba andando).
-ps aux | grep "[a]gent.py" # Para ver el ID del proceso.
-kill ???num_proceso????
-
-# 2 Actualizar repo.
+# 1 Actualizar repo.
 cd home/ubuntu/projects/traslada-email-analizer/
 eval "$(ssh-agent -s)"
 ssh-add ~/.ssh/claudito-sshkey
 git pull
 
-# 3 Instalar librerías.
+# 2 Instalar librerías.
 source .venv/bin/activate
 pip install -r requirements.txt
+
+# 3 Detener (si estaba andando).
+ps aux | grep "[a]gent.py" # Para ver el ID del proceso.
+kill ???num_proceso????
 
 # Ejecuta el agente (no se corta si se pierde conexión con SSH).
 ## (obsoleto) python3 src/agent.py --interval 1
