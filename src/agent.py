@@ -185,6 +185,7 @@ def _construir_log_record(
         cost=db_logger.calcular_costo(input_tokens, output_tokens),
         error=error_descrip is not None,
         error_descrip=error_descrip,
+        resumen=decision.get("resumen"),
     )
     return record
 

@@ -63,6 +63,7 @@ Operamos en CABA (Ciudad Autónoma de Buenos Aires), GBA (Gran Buenos Aires) y p
 - `borrador`: true si la regla que aplica define `borrador: true`. La respuesta se guardará como borrador en Drafts para revisión humana, en lugar de enviarse. Default: false.
 - `red_flags_detectados`: lista con los nombres de los red flags que aplican a este correo, según la sección "Red Flags" de las reglas. Vacío si ninguno aplica.
 - `escalar_a`: unión de todos los `escalar_a` de los red flags detectados, sin duplicados. Vacío si no hay red flags.
+- `resumen`: resumen breve del motivo del correo. SOLO completá este campo si una regla que aplica a este correo lo solicita explícitamente. Si ninguna regla lo pide, dejalo en null. No es la razón de tu decisión (eso va en `razon`), es un resumen objetivo de qué pide o informa el remitente.
 
 Los red flags se evalúan de forma independiente a la `accion`. Aunque la acción sea "ignorar", si se detecta un red flag igualmente completar `red_flags_detectados` y `escalar_a`.
 

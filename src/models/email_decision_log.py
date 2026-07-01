@@ -38,6 +38,7 @@ class EmailDecisionLog(BaseModel):
     accion: Optional[str] = None
     red_flag: bool = False
     decision_json: Optional[str] = None  # JSON completo de la decisión (string)
+    resumen: Optional[str] = None  # Resumen breve del correo analizado (solo si se requiere).
 
     # Métricas
     elapsed_time: float = 0.0  # segundos

@@ -43,3 +43,7 @@ class EmailDecision(BaseModel):
 
     escalar_a: list[str] = []
     """Emails a notificar por escalación (union de todos los red flags que aplican, sin duplicados)."""
+    
+    resumen: str | None = None
+    """Resumen breve del correo analizado (solo si se requiere)."""
+    
