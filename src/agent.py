@@ -223,6 +223,11 @@ def ciclo(mail_client: MailClient, analizador: AnalizadorClaude):
                 mail_client.marcar_procesado(correo["id"])
                 continue
 
+            if remitente == "soporte@sincropool.com":
+                log.info(f"  ⏭ Remitente Sincropool, ignorando.")
+                mail_client.marcar_procesado(correo["id"])
+                continue
+
             # Detección de lead de formulario web: viene de noreply@ interno y el asunto
             # tiene el patrón de lead. Extraemos el email del cuerpo y lo inyectamos como
             # replyTo, para que el resto del sistema lo trate igual que un correo con
