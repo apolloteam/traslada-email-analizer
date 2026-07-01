@@ -1,6 +1,6 @@
 # Buzón de Ventas
 
-**Dirección:** operaciones@traslada.com.ar  
+**Dirección:** operador@traslada.com.ar  
 **Propósito:** Recibe consultas sobre operaciones a realizar sobre una reserva (consulta, modificación, cancelación) o solicitud de nuevas reservas.
 
 ### 📢 Regla - Inspección de bandeja (resumen, sin acción)
