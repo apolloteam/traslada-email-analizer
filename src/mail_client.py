@@ -290,16 +290,42 @@ class MailClient:
         }
         self._request_con_retry("POST", url, json=payload)
 
+    # def marcar_procesado(self, message_id: str, categorias: list[str] | None = None) -> None:
+    #     """
+    #     Agrega la categoría 'AgenteProcesado' al correo más las categorías de las reglas.
+    #     Así el agente no lo vuelve a procesar en el próximo ciclo.
+    #     """
+    #     todas = [CATEGORIA_PROCESADO] + [c for c in (categorias or []) if c != CATEGORIA_PROCESADO]
+    #     url = f"{GRAPH}/users/{self.buzon}/messages/{message_id}"
+    #     payload = {"categories": todas}
+    #     self._request_con_retry("PATCH", url, json=payload)
+
     def marcar_procesado(self, message_id: str, categorias: list[str] | None = None) -> None:
         """
-        Agrega la categoría 'AgenteProcesado' al correo más las categorías de las reglas.
+        Agrega la categoría 'AgenteProcesado' al correo más las categorías de las reglas,
+        PRESERVANDO las categorías que el correo ya tuviera.
         Así el agente no lo vuelve a procesar en el próximo ciclo.
         """
-        todas = [CATEGORIA_PROCESADO] + [c for c in (categorias or []) if c != CATEGORIA_PROCESADO]
         url = f"{GRAPH}/users/{self.buzon}/messages/{message_id}"
+
+        # Leer las categorías actuales para no pisarlas.
+        existentes = []
+        try:
+            r = self._request_con_retry("GET", url, params={"$select": "categories"})
+            existentes = r.json().get("categories", []) or []
+        except Exception as exc:
+            log.error(f"❌ No se pudieron leer las categorías actuales de {message_id}: {exc}")
+
+        # Unión preservando orden y sin duplicados: existentes + procesado + las de las reglas.
+        nuevas = [CATEGORIA_PROCESADO] + [c for c in (categorias or [])]
+        todas = list(existentes)
+        for c in nuevas:
+            if c not in todas:
+                todas.append(c)
+
         payload = {"categories": todas}
         self._request_con_retry("PATCH", url, json=payload)
-
+        
     def quitar_categoria_de_hilo(self, conversation_id: str, categoria: str) -> int:
         """
         Quita la categoría indicada de todos los correos del hilo (mismo conversationId).
