@@ -14,7 +14,7 @@
     - Modelos: VW Nivus, Nissan Kicks, Peugeot 2008, Fiat Cronos o similares.
   - Sedán Ejecutivo: 
     - Máximo pasajeros: 4.
-    - Máximo equipaje: 2 valijas + 2 equipaje de mano (aproximado, según dimensiones estándares).
+    - Máximo equipaje: 3 valijas + 2 equipaje de mano (aproximado, según dimensiones estándares).
     - Código: `EJE`
     - Descripción: El más elegido por ejecutivos.
     - Modelos: Toyota Corolla, VW Virtus, Nissan Versa, VW Taos o similares.
@@ -32,8 +32,8 @@
   - Modelos: Mercedes Benz clase "C", clase "E" y clase "E línea nueva".
 - Traslados grupales y de personal:
   - Combis y Minibuses: Contamos con combis y minibuses que transportan desde 14 hasta 24 pasajeros cada unidad (cantidad de equipaje según configuración).
-  - Buses: Contamos con una moderna flota de Buses de piso simple y piso doble (desde 45 hasta 58 pasajeros por unidad, cantidad de equipaje según configuración).
-  - VANS VIP: Nuestras Vans VIP destacan por su calidad y excelencia. Si se trata de viajar de la mejor manera (Mercedes Benz y Hyundai, que destacan por su elegancia, confort y seguridad).
+  - Buses: Contamos con una moderna flota de Buses de piso simple y piso doble (desde 45 hasta 56 pasajeros por unidad, cantidad de equipaje según configuración).
+  - VAN / VAN Ejecutiva: Nuestras Vans VIP destacan por su calidad y excelencia. Si se trata de viajar de la mejor manera (Mercedes Benz y Hyundai, que destacan por su elegancia, confort y seguridad). Capacidad de 9 a 13 pasajeros.
 
 ### Tipos de clientes:
 - **B2C**: Persona individual (Particular) con dominio gmail|hotmail|yahoo, etc. Pedido personal. Ejemplo: María Sol González (gmail), Pedro Aguilera (hotmail), Juan.
