@@ -35,6 +35,9 @@
   - Buses: Contamos con una moderna flota de Buses de piso simple y piso doble (desde 45 hasta 56 pasajeros por unidad, cantidad de equipaje según configuración).
   - VAN / VAN Ejecutiva: Nuestras Vans VIP destacan por su calidad y excelencia. Si se trata de viajar de la mejor manera (Mercedes Benz y Hyundai, que destacan por su elegancia, confort y seguridad). Capacidad de 9 a 13 pasajeros.
 
+### Servicios adicionales
+- Contamos con sillita para bebé (se requiere solicitarla con anticipación).
+
 ### Tipos de clientes:
 - **B2C**: Persona individual (Particular) con dominio gmail|hotmail|yahoo, etc. Pedido personal. Ejemplo: María Sol González (gmail), Pedro Aguilera (hotmail), Juan.
 - **B2B**: Empresa real (SRL, SA, Club, Institución). Dominio propio o pedido claramente corporativo (aunque use gmail|hotmail).

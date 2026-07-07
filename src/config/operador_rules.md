@@ -13,4 +13,5 @@ Cualquier correo que llegue a este buzón. El objetivo es registrar un resumen d
 
 #### Campos de decisión
 - `accion`: ignorar
+- `categorias`: []
 - `resumen`: Generá un resumen muy breve (una o dos oraciones, máximo ~30 palabras) del motivo del correo: qué pide o informa el remitente. Sé objetivo y conciso. No incluyas saludos ni datos personales, solo el motivo central.
