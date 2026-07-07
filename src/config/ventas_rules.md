@@ -295,6 +295,8 @@ El correo no corresponde a una gestión comercial sino a otra área: reclamos, a
 
 #### Ejemplos que NO aplican
 - Consultas de precio o presupuesto de un traslado nuevo (eso es Consulta comercial).
+- El reclamo o queja es sobre una gestión que corresponde a este buzón (Ventas): demoras en enviar una cotización o presupuesto, falta de respuesta a una consulta comercial, seguimiento de un pedido de precio, etc. En esos casos el correo se queda en Ventas y se trata según la regla comercial o de reclamo que corresponda, NO se deriva.
+- El motivo de fondo del correo es comercial (precios, presupuestos, contratación), aunque el tono sea de queja o impaciencia.
 
 #### Campos de decisión
 - `accion`: reenviar
