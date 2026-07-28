@@ -57,6 +57,13 @@ Datos adicionales solo para servicios Periódicos/Recurrentes:
 - Fecha de inicio.
 - Recorrido y paradas (opcional)
 
+### Verificación de datos mínimos (obligatoria)
+Antes de concluir que los datos mínimo están completos, repasá UNO POR UNO todos los datos mínimos requeridos para el tipo de servicio y verificá que cada uno tenga un valor concreto en la conversación (en el correo actual o en cualquier mensaje anterior del hilo).
+
+- Si falta AL MENOS UNO → los datos NO están completos. Aplicá la rama "faltan datos".
+- Si el cliente respondió solo algunos de los datos que le pediste, agradecé los que envió y volvé a pedir ÚNICAMENTE los que siguen faltando (no repitas los que ya dio).
+- Nunca asumas ni inventes un dato que el cliente no informó explícitamente.
+
 ### Vocabulario
 - Servicio Remís: Traslado en auto de hasta 4 pasajeros.
 - Servicio Grupal: Traslado en vans, minibuses, buses (más de 4 pasajeros).
@@ -84,31 +91,26 @@ Complementa el tono base con:
 #### Condiciones
 El correo pregunta por precios, cotizaciones, presupuestos de un traslado de remís y encaja en el perfil B2C. También aplica si el asunto contiene "Source: WebTrasladaPresupuesto" y el lead es de un particular (perfil B2C) para un servicio de remís.
 
-#### Ejemplos que NO aplican
-En caso que ya le hayas indicado que utilice los canales para B2C y haya solicitado nuevamente asesoramiento personalizado.
-
 #### Campos de decisión
-- `accion`: responder
-- `instruccion_respuesta`:
-  Tratá al cliente por su nombre si lo detectás en el correo. Agradecé el interés e informá los canales para reservas B2C. Usá el siguiente ejemplo como modelo de tono, estructura y formato HTML, adaptando el nombre y el contenido al correo real:
-
-```
-  <p>Hola Gonzalo,</p>
-  <p>¡Gracias por contactarnos! Nos alegra que estés considerando a Traslada para tu traslado.</p>
-  <p>Para reservas o consultas podés utilizar estos canales directamente:</p>
-  <ul>
-    <li>Nuestra web: <a href="https://clientes.traslada.com.ar/">crear una cuenta</a></li>
-    <li>App Android: <a href="https://play.google.com/store/apps/details?id=com.traslada.corporativo">descargar en Google Play</a></li>
-    <li>App iOS: <a href="https://itunes.apple.com/us/app/traslada-corporativo/id1250094586?l=es&ls=1&mt=8">descargar en App Store</a></li>
-    <li>WhatsApp: <a href="https://wa.me/5491140504874">escribinos por WhatsApp</a></li>
-    <li>Mesa operativa: 0810-112-5111</li>
-  </ul>
-  <p>Desde ahí podés consultar precios y hacer reservas directamente.</p>
-  <p>¡Quedamos a disposición!</p>
-  <p>Saludos,<br>Equipo Traslada<br>ventas@traslada.com.ar</p>
-```
-- `categorias`: ["B2C", "Remis", "Lead"]
-- `borrador`: true
+- **Según si están todos los datos mínimos requeridos** (ver la base de conocimiento del buzón):
+  - **Si faltan datos:**
+    - `accion`: responder
+    - `categorias`: ["B2C", "Remis", "Lead", "SolicitudDatosFaltantes"]
+    - `instruccion_respuesta`:
+      - Agradecé el interés (si no lo hiciste en un mensaje anterior del hilo).
+      - Solicitá amablemente los datos faltantes e indicá que son requeridos para poder asesorarlo. Informá que, una vez que tengamos todos los datos, un asesor comercial se contactará con una propuesta personalizada.
+      - Incluí el nombre del solicitante si figura en el correo.
+    - `borrador`: false
+  - **Si están todos los datos:**
+    - `accion`: responder_y_reenviar
+    - `reenviar_a`: cmontivero@traslada.com.ar;jgomezmoreno@traslada.com.ar
+    - `categorias`: ["B2C", "Remis", "Lead", "DatosCompletos"]
+    - `instruccion_respuesta`:
+      - Agradecé el interés (si no lo hiciste en un mensaje anterior del hilo).
+      - Informá que un asesor comercial se contactará en breve con la propuesta. Si detectás que en el hilo se los habías pedido antes, agradecé que los haya enviado.
+      - Incluí el nombre del solicitante si figura en el correo.
+    - `comentario_reenvio`: 🚌 FYA - Oportunidad de servicio REMIS B2C. 🙋‍♂️ Contactar al solicitante.
+    - `borrador`: true
 
 ### 📢 Regla - Consulta de servicio Grupal **B2C**
 
@@ -116,7 +118,7 @@ En caso que ya le hayas indicado que utilice los canales para B2C y haya solicit
 El correo pregunta por precios, cotizaciones o presupuestos de un traslado grupal, y encaja en el perfil B2C. También aplica si el asunto contiene "Source: WebTrasladaPresupuesto" y el lead es de un particular (perfil B2C) para un traslado grupal.
 
 #### Campos de decisión
-- **Según si están los datos mínimos requeridos** (ver la base de conocimiento del buzón):
+- **Según si están todos los datos mínimos requeridos** (ver la base de conocimiento del buzón):
   - **Si faltan datos:**
     - `accion`: responder
     - `categorias`: ["B2C", "Grupal", "Lead", "SolicitudDatosFaltantes"]
@@ -142,7 +144,7 @@ El correo pregunta por precios, cotizaciones o presupuestos de un traslado grupa
 El correo pregunta por precios, cotizaciones o presupuestos de un traslado de remís, y encaja en el perfil B2B. También aplica si el asunto contiene "Source: WebTrasladaPresupuesto" y el lead es de una empresa (perfil B2B) para un servicio de remís.
 
 #### Campos de decisión
-- **Según si están los datos mínimos requeridos** (ver la base de conocimiento del buzón):
+- **Según si están todos los datos mínimos requeridos** (ver la base de conocimiento del buzón):
   - **Si faltan datos:**
     - `accion`: responder
     - `categorias`: ["B2B", "Remis", "Lead", "SolicitudDatosFaltantes"]
@@ -168,7 +170,7 @@ El correo pregunta por precios, cotizaciones o presupuestos de un traslado de re
 El correo pregunta por precios, cotizaciones o presupuestos de un traslado grupal para una fecha o evento específico (Eventual), y encaja en el perfil B2B. También aplica si el asunto contiene "Source: WebTrasladaPresupuesto" y el lead es de una empresa (perfil B2B) para un traslado grupal puntual/eventual.
 
 #### Campos de decisión
-- **Según si están los datos mínimos requeridos** (ver la base de conocimiento del buzón):
+- **Según si están todos los datos mínimos requeridos** (ver la base de conocimiento del buzón):
   - **Si faltan datos:**
     - `accion`: responder
     - `categorias`: ["B2B", "Grupal", "Lead", "SolicitudDatosFaltantes"]
@@ -195,7 +197,7 @@ El correo pregunta por precios, cotizaciones o presupuestos de un traslado grupa
 El correo pregunta por precios, cotizaciones, presupuestos o contratación periódica de un traslado de personal, y encaja en el perfil B2B. También aplica si el asunto contiene "Source: WebTrasladaCharters" (lead del formulario web de charters, que corresponde a traslado de personal grupal recurrente B2B).
 
 #### Campos de decisión
-- **Según si están los datos mínimos requeridos** (ver la base de conocimiento del buzón):
+- **Según si están todos los datos mínimos requeridos** (ver la base de conocimiento del buzón):
   - **Si faltan datos:**
     - `accion`: responder
     - `categorias`: ["B2B", "Charter", "Lead", "⭐ Prioritario", "SolicitudDatosFaltantes"]
