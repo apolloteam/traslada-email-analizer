@@ -3,6 +3,7 @@ mail_client.py — Interacción con Outlook 365 via Microsoft Graph API
 """
 
 import os
+import re
 import time
 import logging
 import requests
@@ -140,42 +141,60 @@ class MailClient:
 
     # ── Acciones ──────────────────────────────────────────────────
 
+    def _insertar_en_body(self, draft_html: str, cuerpo_html: str) -> str:
+        """Inserta cuerpo_html justo después del tag <body>; si no existe, lo prepende."""
+        match = re.search(r"<body[^>]*>", draft_html, re.IGNORECASE)
+        if match:
+            pos = match.end()
+            resultado = draft_html[:pos] + cuerpo_html + draft_html[pos:]
+        else:
+            resultado = cuerpo_html + draft_html
+        return resultado
+
+    def _preparar_draft(self, message_id: str, cuerpo_html: str) -> tuple[str, str]:
+        """
+        Crea un borrador de respuesta preservando la cita nativa de Graph e inserta cuerpo_html al inicio.
+        Devuelve (draft_id, html_final).
+        """
+        url_create = f"{GRAPH}/users/{self.buzon}/messages/{message_id}/createReply"
+        r = self._request_con_retry("POST", url_create, json={})
+        draft_id = r.json()["id"]
+        url_get = f"{GRAPH}/users/{self.buzon}/messages/{draft_id}"
+        r = self._request_con_retry("GET", url_get, params={"$select": "body"})
+        draft_html = r.json().get("body", {}).get("content", "")
+        html_final = self._insertar_en_body(draft_html, cuerpo_html)
+        resultado = (draft_id, html_final)
+        return resultado
+
     def responder(self, message_id: str, cuerpo_html: str) -> None:
         """Responde al correo original (va al 'from')."""
-        url = f"{GRAPH}/users/{self.buzon}/messages/{message_id}/reply"
-        payload = {
-            "message": {
-                "body": {"contentType": "HTML", "content": cuerpo_html}
-            },
-            "comment": ""
-        }
-        self._request_con_retry("POST", url, json=payload)
+        draft_id, html_final = self._preparar_draft(message_id, cuerpo_html)
+        url_patch = f"{GRAPH}/users/{self.buzon}/messages/{draft_id}"
+        self._request_con_retry("PATCH", url_patch, json={"body": {"contentType": "HTML", "content": html_final}})
+        url_send = f"{GRAPH}/users/{self.buzon}/messages/{draft_id}/send"
+        self._request_con_retry("POST", url_send)
 
     def responder_a_reply_to(self, message_id: str, cuerpo_html: str, reply_to_address: str) -> None:
         """
         Responde redirigiendo al reply_to en lugar del from. Mantiene threading en el buzón propio.
-        Flujo: createReply → PATCH toRecipients → send (3 llamadas; garantiza que el destinatario sea
-        reply_to_address y no el from original, que en correos derivados es otro buzón interno).
+        Garantiza que el destinatario sea reply_to_address y no el from original (que en correos
+        derivados es otro buzón interno).
         """
-        url_create = f"{GRAPH}/users/{self.buzon}/messages/{message_id}/createReply"
-        payload_create = {"message": {"body": {"contentType": "HTML", "content": cuerpo_html}}}
-        r = self._request_con_retry("POST", url_create, json=payload_create)
-        draft_id = r.json()["id"]
+        draft_id, html_final = self._preparar_draft(message_id, cuerpo_html)
         url_patch = f"{GRAPH}/users/{self.buzon}/messages/{draft_id}"
-        payload_patch = {"toRecipients": [{"emailAddress": {"address": reply_to_address}}]}
+        payload_patch = {
+            "body": {"contentType": "HTML", "content": html_final},
+            "toRecipients": [{"emailAddress": {"address": reply_to_address}}],
+        }
         self._request_con_retry("PATCH", url_patch, json=payload_patch)
         url_send = f"{GRAPH}/users/{self.buzon}/messages/{draft_id}/send"
         self._request_con_retry("POST", url_send)
 
     def crear_draft_respuesta(self, message_id: str, cuerpo_html: str) -> None:
         """Crea un borrador de respuesta en la carpeta Drafts sin enviarlo."""
-        url = f"{GRAPH}/users/{self.buzon}/messages/{message_id}/createReply"
-        payload = {
-            "message": {
-                "body": {"contentType": "HTML", "content": cuerpo_html}
-            }
-        }
-        self._request_con_retry("POST", url, json=payload)
+        draft_id, html_final = self._preparar_draft(message_id, cuerpo_html)
+        url_patch = f"{GRAPH}/users/{self.buzon}/messages/{draft_id}"
+        self._request_con_retry("PATCH", url_patch, json={"body": {"contentType": "HTML", "content": html_final}})
 
     def reenviar(self, message_id: str, destinatarios: list[str], comentario: str = "") -> None:
         """Reenvía el correo a destinatarios externos (escalaciones, notificaciones)."""
