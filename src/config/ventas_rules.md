@@ -1,7 +1,7 @@
 # Buzón de Ventas
 
 **Dirección:** ventas@traslada.com.ar  
-**Propósito:** Recibe consultas comerciales, leads, primeros contactos de clientes potenciales y licitaciones.
+**Propósito:** Recibe consultas comerciales, leads, primeros contactos de clientes potenciales, gestión de cuentas de clientes y licitaciones.
 
 ## Base de conocimiento de este buzón
 ### Tipos de vehículos disponibles
@@ -37,6 +37,7 @@
 
 ### Servicios adicionales
 - Contamos con sillita para bebé (se requiere solicitarla con anticipación).
+- Conductores bilingüe (ingles).
 
 ### Tipos de clientes:
 - **B2C**: Persona individual (Particular) con dominio gmail|hotmail|yahoo, etc. Pedido personal. Ejemplo: María Sol González (gmail), Pedro Aguilera (hotmail), Juan.
@@ -86,6 +87,37 @@ Complementa el tono base con:
 
 ## Reglas
 
+### 📢 Regla - Consulta derivada internamente por otro sector
+
+#### Condiciones
+El correo llega desde una cuenta interna de Traslada (un buzón de área o la cuenta personal de un colaborador) que está sumando a Ventas a una conversación ya en curso con un cliente externo, generalmente poniendo a ventas@ en copia o reenviando el correo del cliente.
+
+Esta regla tiene PRIORIDAD sobre las reglas comerciales: aunque el contenido sea una consulta de precios o presupuesto, la conversación con el cliente ya la está llevando otro sector, así que NO hay que responderle al cliente (sería una respuesta duplicada y confusa). Lo único que corresponde es derivar el correo internamente al sector comercial.
+
+#### Ejemplos que aplican
+- "Dejo en copia al sector de Ventas para que pueda brindarle la información solicitada."
+- "Te paso este correo de un cliente que pide un presupuesto, no es de mi área."
+- "@Ventas, ¿pueden ver esto?" dentro de una cadena con un cliente externo.
+- Un colaborador reenvía a ventas@ un correo de cliente que recibió por error.
+
+#### No aplica si
+- El correo es de un remitente interno pero NO hay ningún cliente externo involucrado en la conversación (es comunicación interna entre compañeros sobre otro tema).
+- El cliente externo escribió directamente a este buzón (sin intermediación de otro sector) → aplican las reglas comerciales normales.
+
+#### Campos de decisión
+- `accion`: reenviar
+- `reenviar_a`: lmercado@traslada.com.ar
+- `comentario_reenvio`: 📨 Correo reenviado internamente a ventas.
+- `categorias`: ["Comercial", "Derivado Interno"]
+
+### 📢 Regla - Blip
+
+#### Condiciones
+Si el remitente es skillcustomers@blip.bot.
+
+- `accion`: ignorar
+- `categorias`: ["Blip"]
+
 ### 📢 Regla - Consulta de servicio de remís **B2C**
 
 #### Condiciones
@@ -129,7 +161,7 @@ El correo pregunta por precios, cotizaciones o presupuestos de un traslado grupa
     - `borrador`: false
   - **Si están todos los datos:**
     - `accion`: responder_y_reenviar
-    - `reenviar_a`: cmontivero@traslada.com.ar;jgomezmoreno@traslada.com.ar
+    - `reenviar_a`: lmercado@traslada.com.ar;mbfernandez@traslada.com.ar
     - `categorias`: ["B2C", "Grupal", "Lead", "DatosCompletos"]
     - `instruccion_respuesta`:
       - Agradecé el interés (si no lo hiciste en un mensaje anterior del hilo).
@@ -299,12 +331,14 @@ El correo no corresponde a una gestión comercial sino a otra área: reclamos, a
 - Consultas de precio o presupuesto de un traslado nuevo (eso es Consulta comercial).
 - El reclamo o queja es sobre una gestión que corresponde a este buzón (Ventas): demoras en enviar una cotización o presupuesto, falta de respuesta a una consulta comercial, seguimiento de un pedido de precio, etc. En esos casos el correo se queda en Ventas y se trata según la regla comercial o de reclamo que corresponda, NO se deriva.
 - El motivo de fondo del correo es comercial (precios, presupuestos, contratación), aunque el tono sea de queja o impaciencia.
+- Cualquier consulta por gestión comercial de cuentas de clientes como actualización de precios, configuración de cuenta, modificación de forma y plazo de pago, alta de empleados.
 
 #### Campos de decisión
 - `accion`: reenviar
 - `reenviar_a`: según el área que corresponda, elegí UN destino de esta tabla:
   - Soporte técnico / incidentes de sistema → reservas@traslada.com.ar
-  - Facturación, pagos, comprobantes → administracion@traslada.com.ar
+  - Aviso de pagos, retenciones, ordenes de pago → cobranzas@traslada.com.ar
+  - Pedido de facturas, reclamos sobre valorizaciones o precios, envió de ordenes de compra → facturacion@traslada.com.ar
   - Operaciones / consultas post-reserva (estado, cambios, cancelaciones) → reservas@traslada.com.ar
   - Gestión / alta de choferes → flota@traslada.com.ar
   - Atención al cliente / reclamos / objetos perdidos → sac@traslada.com.ar
