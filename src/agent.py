@@ -113,6 +113,28 @@ def extraer_email_de_lead(body_texto: str) -> str | None:
     return m.group(1).lower() if m else None
 
 
+def obtener_primer_destinatario_externo(correo: dict) -> str | None:
+    """
+    Devuelve la primera dirección de correo con dominio no interno entre
+    toRecipients y ccRecipients, o None si no hay ninguna.
+    Busca primero en toRecipients, luego en ccRecipients.
+
+    Se usa para detectar correos internos que incluyen un cliente externo
+    en la conversación (ej.: un empleado pone en copia a un buzón del agente
+    al responderle a un cliente). En ese caso la dirección externa es el
+    cliente al que eventualmente hay que responderle, y se inyecta como
+    replyTo para que el flujo posterior la use igual que en cualquier otro correo.
+    """
+    for campo in ("toRecipients", "ccRecipients"):
+        for destinatario in correo.get(campo, []):
+            address = destinatario.get("emailAddress", {}).get("address", "")
+            if address:
+                dominio = address.split("@")[-1].lower()
+                if dominio not in DOMINIOS_INTERNOS:
+                    return address.lower()
+    return None
+
+
 def _a_hora_argentina(valor) -> str | None:
     """
     Convierte un datetime o un string ISO 8601 (UTC u otro offset) a hora local de
@@ -266,10 +288,16 @@ def ciclo(mail_client: MailClient, analizador: AnalizadorClaude):
                 reply_to_list = correo.get("replyTo", [])
                 tiene_reply_to = bool(reply_to_list and reply_to_list[0].get("emailAddress", {}).get("address"))
                 if not tiene_reply_to:
-                    log.info(f"  ⏭ Correo interno sin replyTo ({remitente}), ignorando.")
-                    mail_client.marcar_procesado(correo["id"])
-                    continue
-                log.info(f"  ✅ Correo interno derivado ({remitente}), pasando al análisis.")
+                    externo = obtener_primer_destinatario_externo(correo)
+                    if externo:
+                        correo["replyTo"] = [{"emailAddress": {"address": externo}}]
+                        log.info(f"  📨 Interno con cliente externo en copia. Cliente: {externo}")
+                    else:
+                        log.info(f"  ⏭ Correo interno sin replyTo ({remitente}), ignorando.")
+                        mail_client.marcar_procesado(correo["id"])
+                        continue
+                else:
+                    log.info(f"  ✅ Correo interno derivado ({remitente}), pasando al análisis.")
             # ──────────────────────────────────────────────────────────────────────────────────────
 
             # ── A partir de acá el correo se analiza: SIEMPRE se loguea a DB ──────────
