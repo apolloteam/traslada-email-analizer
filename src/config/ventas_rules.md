@@ -135,7 +135,7 @@ El correo pregunta por precios, cotizaciones, presupuestos de un traslado de rem
     - `borrador`: false
   - **Si están todos los datos:**
     - `accion`: responder_y_reenviar
-    - `reenviar_a`: cmontivero@traslada.com.ar;jgomezmoreno@traslada.com.ar
+    - `reenviar_a`: lmercado@traslada.com.ar; mbfernandez@traslada.com.ar
     - `categorias`: ["B2C", "Remis", "Lead", "DatosCompletos"]
     - `instruccion_respuesta`:
       - Agradecé el interés (si no lo hiciste en un mensaje anterior del hilo).
@@ -161,7 +161,7 @@ El correo pregunta por precios, cotizaciones o presupuestos de un traslado grupa
     - `borrador`: false
   - **Si están todos los datos:**
     - `accion`: responder_y_reenviar
-    - `reenviar_a`: lmercado@traslada.com.ar;mbfernandez@traslada.com.ar
+    - `reenviar_a`: jgomezmoreno@traslada.com.ar; cmontivero@traslada.com.ar
     - `categorias`: ["B2C", "Grupal", "Lead", "DatosCompletos"]
     - `instruccion_respuesta`:
       - Agradecé el interés (si no lo hiciste en un mensaje anterior del hilo).
